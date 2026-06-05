@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mega Scramble - Round 2: Ultimate Battle</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Bubblegum Sans', cursive;
+            background: linear-gradient(135deg, #1A3A5F, #0F2A44);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        /* TOP TIMER BAR */
+        .timer-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1cm;
+            background: rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 100%;
+            background: #FFD700;
+            position: absolute;
+            top: 0;
+            right: 0;
+            animation: countdown 900s linear forwards;
+            box-shadow: 0 0 10px #FFD700;
+        }
+
+        @keyframes countdown {
+            from { width: 100%; right: 0; }
+            to { width: 0%; right: 0; }
+        }
+
+        /* MAIN CONTAINER */
+        .battle-container {
+            background: white;
+            border-radius: 30px;
+            padding: 25px 30px;
+            max-width: 1400px;
+            width: 95%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            margin: 20px auto;
+            max-height: 85vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            border: 3px solid #FFD700;
+        }
+
+        .battle-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .stage-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 36px;
+            color: #1A3A5F;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 #FFD700;
+            text-align: center;
+        }
+
+        .class-badge {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 15px;
+            background: #f0f0f0;
+            display: inline-block;
+            padding: 5px 25px;
+            border-radius: 50px;
+            text-align: center;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .class-badge span {
+            font-weight: bold;
+            color: #1A3A5F;
+        }
+
+        /* TWO COLUMN LAYOUT */
+        .battle-layout {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* LEFT SIDE - GAME AREA */
+        .game-area {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .question-number {
+            font-family: 'Fredoka One', cursive;
+            font-size: 22px;
+            color: #4ECDC4;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, #1A3A5F, #2B4F7C);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 20px;
+            border: 2px solid #FFD700;
+            text-align: center;
+        }
+
+        .scrambled-label {
+            font-family: 'Fredoka One', cursive;
+            font-size: 22px;
+            color: #FFD700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scrambled-sentence {
+            font-size: 32px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+        }
+
+        .answer-section {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+            border: 2px solid #4ECDC4;
+            text-align: center;
+        }
+
+        .answer-label {
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            color: #4ECDC4;
+            margin-bottom: 10px;
+        }
+
+        .answer-text {
+            font-size: 28px;
+            color: #1A3A5F;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            border: 3px solid #4ECDC4;
+            word-wrap: break-word;
+            font-weight: bold;
+        }
+
+        .current-status {
+            background: linear-gradient(145deg, #FFD700, #FDB931);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .students-remaining {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1A3A5F;
+        }
+
+        .students-remaining span {
+            font-size: 48px;
+            color: #c62828;
+        }
+
+        /* RIGHT SIDE - STUDENT LIST */
+        .students-area {
+            flex: 1;
+            min-width: 280px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid #FFD700;
+        }
+
+        .students-area h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            color: #1A3A5F;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .student-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .student-controls input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            font-family: 'Bubblegum Sans', cursive;
+            border: 2px solid #1A3A5F;
+            border-radius: 15px;
+        }
+
+        .student-controls button {
+            padding: 10px 20px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 16px;
+            background: #4ECDC4;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .student-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 15px;
+            border-left: 8px solid #4ECDC4;
+        }
+
+        .student-item.eliminated {
+            opacity: 0.5;
+            background: #e0e0e0;
+            border-left-color: #c62828;
+            text-decoration: line-through;
+        }
+
+        .student-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .eliminate-btn {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+            font-size: 14px;
+        }
+
+        .eliminate-btn:hover {
+            background: #ff4444;
+        }
+
+        /* CONTROL BUTTONS */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .control-btn {
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            color: white;
+            text-transform: uppercase;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+            transition: all 0.1s ease;
+            min-width: 150px;
+        }
+
+        .control-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        }
+
+        .btn-show { 
+            background: #4ECDC4; 
+            box-shadow: 0 5px 0 #2A8F87;
+        }
+        .btn-next { 
+            background: #FFD700; 
+            color: #333;
+            box-shadow: 0 5px 0 #C4A000;
+        }
+        .btn-end { 
+            background: #c62828; 
+            box-shadow: 0 5px 0 #8B1A1A;
+        }
+        .btn-home { 
+            background: #95a5a6; 
+            box-shadow: 0 5px 0 #6C7A7D;
+        }
+
+        .hidden { display: none !important; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: modalPop 0.5s ease-out;
+            border: 5px solid #FFD700;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon { font-size: 80px; margin-bottom: 20px; }
+        .modal-content h2 { font-family: 'Fredoka One', cursive; font-size: 42px; color: #1A3A5F; margin-bottom: 20px; }
+        .modal-content p { font-size: 24px; margin-bottom: 30px; color: #333; }
+
+        .modal-btn {
+            font-family: 'Fredoka One', cursive;
+            font-size: 24px;
+            padding: 12px 40px;
+            background: linear-gradient(145deg, #1A3A5F, #0F2A44);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 0 #0A1A2F;
+        }
+
+        .modal-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #0A1A2F;
+        }
+
+        @media (max-width: 768px) {
+            .scrambled-sentence { font-size: 24px; }
+            .answer-text { font-size: 22px; }
+            .control-btn { font-size: 16px; padding: 10px 18px; min-width: 120px; }
+            .students-area h3 { font-size: 20px; }
+            .student-name { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP TIMER BAR -->
+<div class="timer-container">
+    <div class="timer-bar"></div>
+</div>
+
+<div class="battle-container">
+    <h1 class="stage-title">👑 ROUND 2: ULTIMATE BATTLE</h1>
+    <div class="class-badge" id="classDisplay">Loading class...</div>
+
+    <div class="battle-layout">
+        <!-- LEFT: GAME AREA -->
+        <div class="game-area">
+            <div class="question-number" id="questionNumber"></div>
+
+            <div class="question-box">
+                <div class="scrambled-label">🔀 SCRAMBLED SENTENCE</div>
+                <div class="scrambled-sentence" id="scrambledSentence">Loading questions...</div>
+            </div>
+
+            <div class="answer-section" id="answerSection">
+                <div class="answer-label">✓ CORRECT ANSWER</div>
+                <div class="answer-text" id="answerText"></div>
+            </div>
+
+            <div class="current-status">
+                <div class="students-remaining">
+                    🎯 Students Remaining: <span id="remainingCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: STUDENT LIST -->
+        <div class="students-area">
+            <h3>📋 STUDENTS IN BATTLE</h3>
+            <div class="student-controls">
+                <input type="text" id="studentNameInput" placeholder="Student name" maxlength="20">
+                <button id="addStudentBtn">➕ Add</button>
+            </div>
+            <div class="student-list" id="studentList">
+                <p style="text-align:center; color:#999;">Add students to begin</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn btn-show" id="showAnswerBtn">Show Answer</button>
+        <button class="control-btn btn-next hidden" id="nextBtn">Next Round ➤</button>
+        <button class="control-btn btn-end" id="endGameBtn">🏆 End Game</button>
+        <button class="control-btn btn-home" onclick="location.href='index.html'">Home</button>
+    </div>
+</div>
+
+<!-- MODAL: End Game / Winner Declaration -->
+<div class="modal-overlay" id="endGameModal">
+    <div class="modal-content">
+        <div class="modal-icon">🏆</div>
+        <h2 id="modalTitle">GAME OVER</h2>
+        <p id="modalMessage">Do you want to end the battle?</p>
+        <button class="modal-btn" id="modalConfirmBtn">Confirm</button>
+    </div>
+</div>
+
+<script>
+let questions = [];
+let currentIndex = 0;
+let timerTimeout;
+let students = [];
+let currentCorrectAnswer = '';
+let gameActive = true;
+
+const classNames = {
+    '2pm': '2:00 PM Class (A1)',
+    '3pm': '3:00 PM Class (A1)',
+    '4pm': '4:00 PM Class (High A2)',
+    '5pm': '5:00 PM Class (Pre A1)'
+};
+
+$(document).ready(function () {
+    const selectedClass = localStorage.getItem('megaScrambleClass');
+    const selectedCSV = localStorage.getItem('megaScrambleCSV');
+    
+    if (!selectedClass || !selectedCSV) {
+        alert('⚠️ No class selected. Please go back and select a class.');
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    const displayName = classNames[selectedClass] || selectedClass.toUpperCase();
+    $('#classDisplay').html(`Class: <span>${displayName}</span>`);
+    
+    const url = selectedCSV + '?t=' + new Date().getTime();
+    
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            if (results.data && results.data.length > 0) {
+                questions = results.data
+                    .filter(row => row['Scrambled sentence'] && row['Answer'])
+                    .map(row => ({
+                        scrambled: row['Scrambled sentence'].trim(),
+                        correct: row['Answer'].trim()
+                    }));
+                
+                if (questions.length > 0) {
+                    // Shuffle questions
+                    for (let i = questions.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [questions[i], questions[j]] = [questions[j], questions[i]];
+                    }
+                    showQuestion();
+                    
+                    // Start timer (15 minutes)
+                    timerTimeout = setTimeout(function() {
+                        if (gameActive) endGame('⏰ TIME\'S UP!', 'The battle time has expired.');
+                    }, 900000);
+                    
+                    $('.timer-bar').on('animationend', function() {
+                        if (gameActive) endGame('⏰ TIME\'S UP!', 'The battle time has expired.');
+                    });
+                } else {
+                    alert('No valid questions found. Check your CSV format.');
+                }
+            } else {
+                alert('Could not load questions.');
+            }
+        },
+        error: function(error) {
+            alert('Could not load CSV file: ' + selectedCSV);
+        }
+    });
+    
+    // Load saved students from localStorage
+    loadStudents();
+    renderStudentList();
+    updateRemainingCount();
+});
+
+function showQuestion() {
+    if (!gameActive) return;
+    
+    if (currentIndex >= questions.length) {
+        // Ran out of questions - declare winner from remaining students
+        const remaining = students.filter(s => !s.eliminated);
+        if (remaining.length === 1) {
+            declareWinner(remaining[0].name);
+        } else if (remaining.length > 1) {
+            endGame('🏆 BATTLE COMPLETE!', `Multiple champions remain! ${remaining.length} students survived all questions.`);
+        } else {
+            endGame('🏆 BATTLE COMPLETE!', 'Great effort, everyone!');
+        }
+        return;
+    }
+
+    const q = questions[currentIndex];
+    currentCorrectAnswer = q.correct;
+    
+    $('#questionNumber').text(`Round ${currentIndex + 1} of ${questions.length}`);
+    $('#scrambledSentence').text(q.scrambled);
+    $('#answerText').text(q.correct);
+    $('#answerSection').hide();
+    $('#showAnswerBtn').removeClass('hidden');
+    $('#nextBtn').addClass('hidden');
+    
+    // Scroll to top
+    $('.battle-container').scrollTop(0);
+}
+
+function eliminateStudent(studentId, studentName) {
+    const student = students.find(s => s.id === studentId);
+    if (student && !student.eliminated && gameActive) {
+        student.eliminated = true;
+        saveStudents();
+        renderStudentList();
+        updateRemainingCount();
+        
+        // Check if only one remains
+        const remaining = students.filter(s => !s.eliminated);
+        if (remaining.length === 1) {
+            declareWinner(remaining[0].name);
+        } else if (remaining.length === 0) {
+            endGame('💀 EVERYONE ELIMINATED!', 'No one survived the battle!');
+        }
+    }
+}
+
+function declareWinner(winnerName) {
+    if (!gameActive) return;
+    
+    gameActive = false;
+    clearTimeout(timerTimeout);
+    $('.timer-bar').css('animation-play-state', 'paused');
+    
+    // Save winner to localStorage for winner.html
+    localStorage.setItem('megaScrambleWinner', winnerName);
+    
+    // Redirect to winner page
+    window.location.href = 'winner.html';
+}
+
+function endGame(title, message) {
+    if (!gameActive) return;
+    
+    gameActive = false;
+    clearTimeout(timerTimeout);
+    $('.timer-bar').css('animation-play-state', 'paused');
+    
+    $('#modalTitle').text(title);
+    $('#modalMessage').text(message);
+    $('#endGameModal').fadeIn(300).css('display', 'flex');
+}
+
+$('#showAnswerBtn').on('click', function () {
+    $('#answerSection').slideDown(300);
+    $(this).addClass('hidden');
+    $('#nextBtn').removeClass('hidden');
+});
+
+$('#nextBtn').on('click', function () {
+    // Before moving to next question, teacher manually eliminates students
+    // Teacher uses the eliminate buttons on the right panel
+    currentIndex++;
+    showQuestion();
+});
+
+$('#endGameBtn').on('click', function() {
+    if (gameActive) {
+        const remaining = students.filter(s => !s.eliminated);
+        if (remaining.length === 1) {
+            declareWinner(remaining[0].name);
+        } else if (remaining.length > 1) {
+            endGame('🏆 END GAME', `Game ended early. ${remaining.length} students remain in battle.`);
+        } else {
+            endGame('🏆 END GAME', 'Game ended by teacher.');
+        }
+    }
+});
+
+$('#modalConfirmBtn').on('click', function() {
+    $('#endGameModal').fadeOut(300);
+    window.location.href = 'index.html';
+});
+
+// Student Management Functions
+function loadStudents() {
+    const saved = localStorage.getItem('megaScrambleStudents');
+    if (saved) {
+        students = JSON.parse(saved);
+    } else {
+        // Sample students for demo
+        students = [
+            { id: 1, name: 'Student 1', eliminated: false },
+            { id: 2, name: 'Student 2', eliminated: false },
+            { id: 3, name: 'Student 3', eliminated: false },
+            { id: 4, name: 'Student 4', eliminated: false }
+        ];
+        saveStudents();
+    }
+}
+
+function saveStudents() {
+    localStorage.setItem('megaScrambleStudents', JSON.stringify(students));
+}
+
+function renderStudentList() {
+    const container = $('#studentList');
+    if (students.length === 0) {
+        container.html('<p style="text-align:center; color:#999;">Add students to begin</p>');
+        return;
+    }
+    
+    let html = '';
+    students.forEach(student => {
+        html += `
+            <div class="student-item ${student.eliminated ? 'eliminated' : ''}">
+                <span class="student-name">${escapeHtml(student.name)}</span>
+                ${!student.eliminated ? `<button class="eliminate-btn" data-id="${student.id}">❌ Eliminate</button>` : '<span style="color:#999;">ELIMINATED</span>'}
+            </div>
+        `;
+    });
+    container.html(html);
+    
+    // Attach eliminate events
+    $('.eliminate-btn').on('click', function() {
+        const id = parseInt($(this).data('id'));
+        const student = students.find(s => s.id === id);
+        if (student) {
+            eliminateStudent(id, student.name);
+        }
+    });
+}
+
+function updateRemainingCount() {
+    const remaining = students.filter(s => !s.eliminated).length;
+    $('#remainingCount').text(remaining);
+}
+
+$('#addStudentBtn').on('click', function() {
+    const name = $('#studentNameInput').val().trim();
+    if (name === '') {
+        alert('Please enter a student name.');
+        return;
+    }
+    
+    const newId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1;
+    students.push({ id: newId, name: name, eliminated: false });
+    saveStudents();
+    renderStudentList();
+    updateRemainingCount();
+    $('#studentNameInput').val('');
+});
+
+function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+window.addEventListener('beforeunload', function() {
+    clearTimeout(timerTimeout);
+});
+</script>
+
+</body>
+</html>

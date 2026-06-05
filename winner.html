@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Winner - Mega Scramble</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Bubblegum Sans', cursive;
+    overflow: hidden;
+}
+
+/* CENTER STACK */
+.winner-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* LOGO - Make it clickable */
+.winner-logo {
+    width: 900px;
+    max-width: 80vw;
+    display: relative;
+    margin-top: -60px;
+    cursor: pointer;  /* Shows hand cursor on hover */
+    transition: transform 0.3s ease;
+}
+
+.winner-logo:hover {
+    transform: scale(1.02);  /* Slight zoom effect on hover */
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+}
+
+/* BUTTON */
+.home-btn {
+    margin-top: 36px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    padding: 18px 42px;
+    background: linear-gradient(145deg, #4ECDC4, #44A08D);
+    color: white;
+    border-radius: 18px;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.home-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+}
+
+/* FIREWORKS */
+.firework {
+    position: fixed;
+    top: -40px;
+    font-size: 22px;
+    animation: fall linear forwards;
+    pointer-events: none;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Custom confirmation dialog */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    animation: modalPop 0.4s ease-out;
+}
+
+@keyframes modalPop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.modal-content h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 32px;
+    color: #FF6B6B;
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.modal-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    min-width: 120px;
+}
+
+.modal-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.btn-yes {
+    background: linear-gradient(145deg, #4ECDC4, #44A08D);
+}
+
+.btn-no {
+    background: linear-gradient(145deg, #FF6B6B, #EE5A6F);
+}
+</style>
+</head>
+
+<body>
+
+<!-- Winner Content -->
+<div class="winner-wrapper">
+    <img src="Winner.png" alt="Winner Logo" class="winner-logo" id="winnerLogo">
+    <a href="index.html" class="home-btn">Back to Home</a>
+</div>
+
+<!-- Custom Confirmation Modal -->
+<div class="modal-overlay" id="restartModal">
+    <div class="modal-content">
+        <div class="modal-icon">🏆</div>
+        <h2>Play Again?</h2>
+        <p>Do you want to return to the main menu and start a new game?</p>
+        <div class="modal-buttons">
+            <button class="modal-btn btn-yes" id="yesBtn">Yes</button>
+            <button class="modal-btn btn-no" id="noBtn">No</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const fireworks = ['✨','🎆','🎇','💥','⭐','🌟','💫','⚡','🔥','🎉','🎊'];
+
+function launchFirework() {
+    const fw = document.createElement('div');
+    fw.className = 'firework';
+    fw.textContent = fireworks[Math.floor(Math.random() * fireworks.length)];
+    fw.style.left = Math.random() * 100 + 'vw';
+    fw.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
+    document.body.appendChild(fw);
+
+    setTimeout(() => fw.remove(), 4000);
+}
+
+// Start fireworks
+setInterval(launchFirework, 180);
+
+// Get elements
+const winnerLogo = document.getElementById('winnerLogo');
+const restartModal = document.getElementById('restartModal');
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+
+// Click on logo - show modal
+winnerLogo.addEventListener('click', function() {
+    restartModal.style.display = 'flex';
+});
+
+// Click Yes - go to index.html
+yesBtn.addEventListener('click', function() {
+    window.location.href = 'index.html';
+});
+
+// Click No - hide modal
+noBtn.addEventListener('click', function() {
+    restartModal.style.display = 'none';
+});
+
+// Click outside modal content - close modal
+window.addEventListener('click', function(event) {
+    if (event.target === restartModal) {
+        restartModal.style.display = 'none';
+    }
+});
+
+// Keyboard support - press ESC to close modal
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && restartModal.style.display === 'flex') {
+        restartModal.style.display = 'none';
+    }
+});
+</script>
+
+</body>
+</html>
