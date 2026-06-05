@@ -362,7 +362,7 @@
     </div>
 
     <script>
-        // CSV files for each class (with headers: Question #, Scrambled sentence, Answer)
+        // CSV files for each class
         const CSV_FILES = {
             '2pm': '2pm.csv',
             '3pm': '3pm.csv',
@@ -380,8 +380,6 @@
             if (classValue) {
                 localStorage.setItem('megaScrambleClass', classValue);
                 localStorage.setItem('megaScrambleCSV', CSV_FILES[classValue]);
-                console.log('Class selected:', classValue);
-                console.log('CSV file:', CSV_FILES[classValue]);
             } else {
                 localStorage.removeItem('megaScrambleClass');
                 localStorage.removeItem('megaScrambleCSV');
