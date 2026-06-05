@@ -26,7 +26,6 @@
             overflow: auto;
         }
 
-        /* TOP TIMER BAR */
         .timer-container {
             position: fixed;
             top: 0;
@@ -53,7 +52,6 @@
             to { width: 0%; right: 0; }
         }
 
-        /* MAIN CARD - COMPACT, FITS ON SCREEN */
         .question-container {
             background: white;
             border-radius: 25px;
@@ -295,7 +293,6 @@
             box-shadow: 0 1px 0 #0A1A2F;
         }
 
-        /* Mobile adjustments */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .stage-title { font-size: 26px; }
@@ -307,17 +304,10 @@
             .team-stat input { width: 55px; font-size: 14px; }
             .question-box { padding: 15px; }
         }
-
-        @media (max-width: 480px) {
-            .scrambled-sentence { font-size: 18px; }
-            .answer-text { font-size: 16px; }
-            .control-btn { font-size: 14px; padding: 6px 12px; min-width: 100px; }
-        }
     </style>
 </head>
 <body>
 
-<!-- TOP TIMER BAR -->
 <div class="timer-container">
     <div class="timer-bar"></div>
 </div>
@@ -382,6 +372,15 @@ const classNames = {
     '5pm': '5:00 PM Class (Pre A1)'
 };
 
+// Fisher-Yates shuffle algorithm - GUARANTEES random order
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 $(document).ready(function () {
     const selectedClass = localStorage.getItem('megaScrambleClass');
     const selectedCSV = localStorage.getItem('megaScrambleCSV');
@@ -411,11 +410,10 @@ $(document).ready(function () {
                     }));
                 
                 if (questions.length > 0) {
-                    // Shuffle questions
-                    for (let i = questions.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [questions[i], questions[j]] = [questions[j], questions[i]];
-                    }
+                    // 🔀 ENSURE RANDOM ORDER - SHUFFLE QUESTIONS!
+                    questions = shuffleArray(questions);
+                    console.log('Questions shuffled. Total:', questions.length);
+                    
                     showQuestion();
                     
                     timerTimeout = setTimeout(function() {
@@ -450,7 +448,6 @@ function showQuestion() {
     $('#scrambledSentence').text(q.scrambled);
     $('#answerText').text(q.correct);
     
-    // Hide answer section and reset buttons - NO SCROLLING
     $('#answerSection').hide();
     $('#showAnswerBtn').removeClass('hidden');
     $('#nextBtn').addClass('hidden');
@@ -467,7 +464,6 @@ function showCompleteModal() {
 }
 
 $('#showAnswerBtn').on('click', function () {
-    // Just show the answer - NO SCROLLING
     $('#answerSection').slideDown(200);
     $(this).addClass('hidden');
     $('#nextBtn').removeClass('hidden');
