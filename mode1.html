@@ -26,7 +26,7 @@
             overflow: auto;
         }
 
-        /* ===== TOP TIMER BAR (1cm thick, bright yellow, right to left) ===== */
+        /* TOP TIMER BAR */
         .timer-container {
             position: fixed;
             top: 0;
@@ -46,7 +46,6 @@
             right: 0;
             animation: countdown 900s linear forwards;
             box-shadow: 0 0 10px #FFD700;
-            border-radius: 0;
         }
 
         @keyframes countdown {
@@ -54,7 +53,7 @@
             to { width: 0%; right: 0; }
         }
 
-        /* ===== MAIN CARD (smaller, fits on screen) ===== */
+        /* MAIN CARD */
         .question-container {
             background: white;
             border-radius: 30px;
@@ -127,7 +126,6 @@
             margin-bottom: 20px;
             flex-shrink: 0;
             border: 2px solid #FFD700;
-            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
         }
 
         .scrambled-label {
@@ -313,7 +311,6 @@
             box-shadow: 0 2px 0 #0A1A2F;
         }
 
-        /* Mobile adjustments */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .stage-title { font-size: 28px; }
@@ -327,18 +324,11 @@
             .answer-section { padding: 15px; }
             .class-badge { font-size: 14px; }
         }
-
-        @media (max-width: 480px) {
-            .scrambled-sentence { font-size: 20px; }
-            .answer-text { font-size: 18px; }
-            .control-btn { font-size: 16px; padding: 8px 15px; min-width: 110px; }
-        }
     </style>
 </head>
-
 <body>
 
-<!-- TOP TIMER BAR (1cm thick, bright yellow, counts down from right to left) -->
+<!-- TOP TIMER BAR -->
 <div class="timer-container">
     <div class="timer-bar"></div>
 </div>
@@ -354,7 +344,7 @@
         <div class="scrambled-sentence" id="scrambledSentence">Loading questions...</div>
     </div>
 
-    <div class="team-stats" id="teamStats">
+    <div class="team-stats">
         <div class="team-stat"><span>🔴 Team A</span> <input type="number" id="scoreA" value="0" min="0" step="1"></div>
         <div class="team-stat"><span>🔵 Team B</span> <input type="number" id="scoreB" value="0" min="0" step="1"></div>
         <div class="team-stat"><span>🟢 Team C</span> <input type="number" id="scoreC" value="0" min="0" step="1"></div>
@@ -396,7 +386,6 @@ let questions = [];
 let currentIndex = 0;
 let timerTimeout;
 
-// Class display names
 const classNames = {
     '2pm': '2:00 PM Class (A1)',
     '3pm': '3:00 PM Class (A1)',
@@ -405,68 +394,40 @@ const classNames = {
 };
 
 $(document).ready(function () {
-    // Get selected class from localStorage (set by index.html)
     const selectedClass = localStorage.getItem('megaScrambleClass');
     const selectedCSV = localStorage.getItem('megaScrambleCSV');
     
-    console.log('Selected class:', selectedClass);
-    console.log('Selected CSV:', selectedCSV);
-    
     if (!selectedClass || !selectedCSV) {
-        alert('⚠️ No class selected. Please go back to the main menu, select a class, and click START!');
+        alert('⚠️ No class selected. Please go back and select a class.');
         window.location.href = 'index.html';
         return;
     }
     
-    // Display the class
     const displayName = classNames[selectedClass] || selectedClass.toUpperCase();
     $('#classDisplay').html(`Class: <span>${displayName}</span>`);
     
-    console.log('Loading CSV file:', selectedCSV);
-    
     const url = selectedCSV + '?t=' + new Date().getTime();
     
-    // Use PapaParse to handle CSV with headers
     Papa.parse(url, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
-            console.log('CSV loaded. Rows:', results.data.length);
-            console.log('First row sample:', results.data[0]);
-            
-            if (results.errors && results.errors.length > 0) {
-                console.warn('Parse errors:', results.errors);
-            }
-            
             if (results.data && results.data.length > 0) {
-                // Map CSV columns to our format
-                // Your CSV headers: "Question #", "Scrambled sentence", "Answer"
                 questions = results.data
-                    .filter(row => {
-                        const scrambledCol = row['Scrambled sentence'];
-                        const answerCol = row['Answer'];
-                        return scrambledCol && answerCol && scrambledCol.trim() !== '';
-                    })
+                    .filter(row => row['Scrambled sentence'] && row['Answer'])
                     .map(row => ({
                         scrambled: row['Scrambled sentence'].trim(),
                         correct: row['Answer'].trim()
                     }));
                 
-                console.log('Questions loaded successfully:', questions.length);
-                
-                if (questions.length === 0) {
-                    alert('No valid questions found. Please check your CSV format.');
-                    console.log('Available columns in CSV:', Object.keys(results.data[0] || {}));
-                } else {
-                    // Shuffle questions
+                if (questions.length > 0) {
                     for (let i = questions.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         [questions[i], questions[j]] = [questions[j], questions[i]];
                     }
                     showQuestion();
                     
-                    // Start timer (15 minutes = 900000ms)
                     timerTimeout = setTimeout(function() {
                         showTimesUpModal();
                     }, 900000);
@@ -474,15 +435,15 @@ $(document).ready(function () {
                     $('.timer-bar').on('animationend', function() {
                         showTimesUpModal();
                     });
+                } else {
+                    alert('No valid questions found. Check your CSV format.');
                 }
             } else {
-                console.error('No data in CSV');
-                alert('Could not load questions. Please check your CSV file.');
+                alert('Could not load questions.');
             }
         },
         error: function(error) {
-            console.error('Error loading CSV:', error);
-            alert('Could not load CSV file: ' + selectedCSV + '\n\nMake sure the file exists in the same folder as this page.');
+            alert('Could not load CSV file: ' + selectedCSV);
         }
     });
 });
@@ -495,17 +456,12 @@ function showQuestion() {
     }
 
     const q = questions[currentIndex];
-
     $('#questionNumber').text(`Question ${currentIndex + 1} of ${questions.length}`);
     $('#scrambledSentence').text(q.scrambled);
     $('#answerText').text(q.correct);
-
-    // Hide answer section and reset buttons
     $('#answerSection').hide();
     $('#showAnswerBtn').removeClass('hidden');
     $('#nextBtn').addClass('hidden');
-    
-    // Scroll to top
     $('.question-container').scrollTop(0);
 }
 
@@ -520,11 +476,7 @@ function showCompleteModal() {
 }
 
 $('#showAnswerBtn').on('click', function () {
-    $('#answerSection').slideDown(300, function() {
-        $('.question-container').animate({
-            scrollTop: $('.question-container')[0].scrollHeight
-        }, 500);
-    });
+    $('#answerSection').slideDown(300);
     $(this).addClass('hidden');
     $('#nextBtn').removeClass('hidden');
 });
@@ -534,12 +486,7 @@ $('#nextBtn').on('click', function () {
     showQuestion();
 });
 
-// Modal OK buttons
-$('#modalOkBtn').on('click', function() {
-    location.href = 'index.html';
-});
-
-$('#completeOkBtn').on('click', function() {
+$('#modalOkBtn, #completeOkBtn').on('click', function() {
     location.href = 'index.html';
 });
 
