@@ -25,7 +25,6 @@
             padding: 20px;
         }
 
-        /* TOP TIMER BAR */
         .timer-container {
             position: fixed;
             top: 0;
@@ -52,7 +51,6 @@
             to { width: 0%; right: 0; }
         }
 
-        /* MAIN CONTAINER - CENTERED */
         .battle-container {
             background: white;
             border-radius: 30px;
@@ -95,7 +93,6 @@
             margin-bottom: 15px;
         }
 
-        /* CENTERED QUESTION BOX */
         .question-box {
             background: linear-gradient(135deg, #1A3A5F, #2B4F7C);
             border-radius: 25px;
@@ -123,7 +120,6 @@
             text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
         }
 
-        /* CENTERED ANSWER BOX */
         .answer-section {
             background: #f8f9fa;
             border-radius: 25px;
@@ -152,7 +148,6 @@
             font-weight: bold;
         }
 
-        /* SIMPLE STATUS - JUST ROUND COUNTER */
         .round-status {
             background: linear-gradient(145deg, #FFD700, #FDB931);
             border-radius: 20px;
@@ -164,7 +159,6 @@
             color: #1A3A5F;
         }
 
-        /* CONTROL BUTTONS */
         .controls {
             display: flex;
             gap: 15px;
@@ -175,8 +169,8 @@
 
         .control-btn {
             font-family: 'Fredoka One', cursive;
-            font-size: 22px;
-            padding: 14px 30px;
+            font-size: 20px;
+            padding: 12px 25px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
@@ -184,7 +178,7 @@
             text-transform: uppercase;
             box-shadow: 0 5px 0 rgba(0,0,0,0.2);
             transition: all 0.1s ease;
-            min-width: 160px;
+            min-width: 140px;
         }
 
         .control-btn:active {
@@ -201,6 +195,10 @@
             color: #333;
             box-shadow: 0 5px 0 #C4A000;
         }
+        .btn-end { 
+            background: #c62828; 
+            box-shadow: 0 5px 0 #8B1A1A;
+        }
         .btn-home { 
             background: #95a5a6; 
             box-shadow: 0 5px 0 #6C7A7D;
@@ -208,7 +206,6 @@
 
         .hidden { display: none !important; }
 
-        /* MODAL FOR END OF GAME */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -242,35 +239,68 @@
         .modal-content h2 { font-family: 'Fredoka One', cursive; font-size: 42px; color: #1A3A5F; margin-bottom: 20px; }
         .modal-content p { font-size: 24px; margin-bottom: 30px; color: #333; }
 
+        .modal-input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .modal-input-group label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1A3A5F;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .modal-input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-family: 'Bubblegum Sans', cursive;
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
         .modal-btn {
             font-family: 'Fredoka One', cursive;
-            font-size: 24px;
-            padding: 12px 40px;
-            background: linear-gradient(145deg, #1A3A5F, #0F2A44);
+            font-size: 20px;
+            padding: 10px 30px;
             border: none;
             border-radius: 50px;
             color: white;
             cursor: pointer;
-            box-shadow: 0 5px 0 #0A1A2F;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+        }
+
+        .modal-btn-confirm {
+            background: linear-gradient(145deg, #4ECDC4, #44A08D);
+            box-shadow: 0 5px 0 #2A8F87;
         }
 
         .modal-btn:active {
             transform: translateY(3px);
-            box-shadow: 0 2px 0 #0A1A2F;
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
         }
 
         @media (max-width: 768px) {
             .stage-title { font-size: 28px; }
             .scrambled-sentence { font-size: 24px; }
             .answer-text { font-size: 22px; }
-            .control-btn { font-size: 18px; padding: 10px 20px; min-width: 130px; }
+            .control-btn { font-size: 16px; padding: 10px 18px; min-width: 120px; }
             .question-box { padding: 25px 20px; }
         }
     </style>
 </head>
 <body>
 
-<!-- TOP TIMER BAR -->
 <div class="timer-container">
     <div class="timer-bar"></div>
 </div>
@@ -281,38 +311,40 @@
 
     <div class="question-number" id="questionNumber"></div>
 
-    <!-- CENTERED QUESTION BOX -->
     <div class="question-box">
         <div class="scrambled-label">🔀 SCRAMBLED SENTENCE</div>
         <div class="scrambled-sentence" id="scrambledSentence">Loading questions...</div>
     </div>
 
-    <!-- CENTERED ANSWER BOX -->
     <div class="answer-section" id="answerSection">
         <div class="answer-label">✓ CORRECT ANSWER</div>
         <div class="answer-text" id="answerText"></div>
     </div>
 
-    <!-- SIMPLE ROUND STATUS -->
     <div class="round-status" id="roundStatus">
         📋 Ready to begin!
     </div>
 
-    <!-- CONTROL BUTTONS -->
     <div class="controls">
         <button class="control-btn btn-show" id="showAnswerBtn">Show Answer</button>
         <button class="control-btn btn-next hidden" id="nextBtn">Next Round ➤</button>
+        <button class="control-btn btn-end" id="endGameBtn">🏆 End Game</button>
         <button class="control-btn btn-home" onclick="location.href='index.html'">Home</button>
     </div>
 </div>
 
-<!-- MODAL FOR COMPLETION -->
-<div class="modal-overlay" id="completeModal">
+<div class="modal-overlay" id="winnerModal">
     <div class="modal-content">
         <div class="modal-icon">🏆</div>
-        <h2>BATTLE COMPLETE!</h2>
-        <p>Great job, everyone!</p>
-        <button class="modal-btn" id="completeOkBtn">OK</button>
+        <h2>WINNER'S PODIUM</h2>
+        <p>Enter the name(s) of the champion(s)</p>
+        <div class="modal-input-group">
+            <label>🏅 Winner(s):</label>
+            <input type="text" id="winnerNamesInput" placeholder="e.g., Mina or Mina, Joon, Suji" autocomplete="off">
+        </div>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-confirm" id="confirmWinnerBtn">CONFIRM</button>
+        </div>
     </div>
 </div>
 
@@ -329,13 +361,35 @@ const classNames = {
     '5pm': '5:00 PM Class (Pre A1)'
 };
 
-// Fisher-Yates shuffle algorithm - GUARANTEES random order
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+}
+
+function declareWinners() {
+    const winnerInput = $('#winnerNamesInput').val().trim();
+    
+    if (winnerInput === '') {
+        alert('⚠️ Please enter winner name(s)!');
+        return;
+    }
+    
+    let winners = winnerInput.split(',').map(name => name.trim()).filter(name => name !== '');
+    
+    if (winners.length === 0) {
+        alert('⚠️ Please enter at least one winner name!');
+        return;
+    }
+    
+    gameActive = false;
+    clearTimeout(timerTimeout);
+    $('.timer-bar').css('animation-play-state', 'paused');
+    
+    localStorage.setItem('megaScrambleWinners', JSON.stringify(winners));
+    window.location.href = 'winner.html';
 }
 
 $(document).ready(function () {
@@ -367,19 +421,20 @@ $(document).ready(function () {
                     }));
                 
                 if (questions.length > 0) {
-                    // 🔀 ENSURE RANDOM ORDER - SHUFFLE QUESTIONS!
                     questions = shuffleArray(questions);
                     console.log('Questions shuffled. Total:', questions.length);
-                    
                     showQuestion();
                     
-                    // Start 15-minute timer
                     timerTimeout = setTimeout(function() {
-                        if (gameActive) showCompleteModal();
+                        if (gameActive) {
+                            $('#winnerModal').fadeIn(300).css('display', 'flex');
+                        }
                     }, 900000);
                     
                     $('.timer-bar').on('animationend', function() {
-                        if (gameActive) showCompleteModal();
+                        if (gameActive) {
+                            $('#winnerModal').fadeIn(300).css('display', 'flex');
+                        }
                     });
                 } else {
                     alert('No valid questions found. Check your CSV format.');
@@ -398,7 +453,7 @@ function showQuestion() {
     if (!gameActive) return;
     
     if (currentIndex >= questions.length) {
-        showCompleteModal();
+        $('#winnerModal').fadeIn(300).css('display', 'flex');
         return;
     }
 
@@ -409,18 +464,9 @@ function showQuestion() {
     $('#answerText').text(q.correct);
     $('#roundStatus').html(`📋 Round ${currentIndex + 1} of ${questions.length} - Waiting for answers...`);
     
-    // Hide answer section and reset buttons
     $('#answerSection').hide();
     $('#showAnswerBtn').removeClass('hidden');
     $('#nextBtn').addClass('hidden');
-}
-
-function showCompleteModal() {
-    if (!gameActive) return;
-    gameActive = false;
-    clearTimeout(timerTimeout);
-    $('.timer-bar').css('animation-play-state', 'paused');
-    $('#completeModal').fadeIn(300).css('display', 'flex');
 }
 
 $('#showAnswerBtn').on('click', function () {
@@ -435,8 +481,21 @@ $('#nextBtn').on('click', function () {
     showQuestion();
 });
 
-$('#completeOkBtn').on('click', function() {
-    location.href = 'index.html';
+$('#endGameBtn').on('click', function() {
+    if (gameActive) {
+        $('#winnerModal').fadeIn(300).css('display', 'flex');
+    }
+});
+
+$('#confirmWinnerBtn').on('click', function() {
+    declareWinners();
+});
+
+// Press Enter in input field to confirm
+$('#winnerNamesInput').on('keypress', function(e) {
+    if (e.which === 13) {
+        declareWinners();
+    }
 });
 
 window.addEventListener('beforeunload', function() {
