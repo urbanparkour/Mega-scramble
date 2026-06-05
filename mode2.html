@@ -206,90 +206,6 @@
 
         .hidden { display: none !important; }
 
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 40px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            animation: modalPop 0.5s ease-out;
-            border: 5px solid #FFD700;
-        }
-
-        @keyframes modalPop {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-icon { font-size: 80px; margin-bottom: 20px; }
-        .modal-content h2 { font-family: 'Fredoka One', cursive; font-size: 42px; color: #1A3A5F; margin-bottom: 20px; }
-        .modal-content p { font-size: 24px; margin-bottom: 30px; color: #333; }
-
-        .modal-input-group {
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .modal-input-group label {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1A3A5F;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .modal-input-group input {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-family: 'Bubblegum Sans', cursive;
-            border: 2px solid #FFD700;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .modal-btn {
-            font-family: 'Fredoka One', cursive;
-            font-size: 20px;
-            padding: 10px 30px;
-            border: none;
-            border-radius: 50px;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
-        }
-
-        .modal-btn-confirm {
-            background: linear-gradient(145deg, #4ECDC4, #44A08D);
-            box-shadow: 0 5px 0 #2A8F87;
-        }
-
-        .modal-btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
-        }
-
         @media (max-width: 768px) {
             .stage-title { font-size: 28px; }
             .scrambled-sentence { font-size: 24px; }
@@ -333,21 +249,6 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="winnerModal">
-    <div class="modal-content">
-        <div class="modal-icon">🏆</div>
-        <h2>WINNER'S PODIUM</h2>
-        <p>Enter the name(s) of the champion(s)</p>
-        <div class="modal-input-group">
-            <label>🏅 Winner(s):</label>
-            <input type="text" id="winnerNamesInput" placeholder="e.g., Mina or Mina, Joon, Suji" autocomplete="off">
-        </div>
-        <div class="modal-buttons">
-            <button class="modal-btn modal-btn-confirm" id="confirmWinnerBtn">CONFIRM</button>
-        </div>
-    </div>
-</div>
-
 <script>
 let questions = [];
 let currentIndex = 0;
@@ -369,26 +270,14 @@ function shuffleArray(array) {
     return array;
 }
 
-function declareWinners() {
-    const winnerInput = $('#winnerNamesInput').val().trim();
-    
-    if (winnerInput === '') {
-        alert('⚠️ Please enter winner name(s)!');
-        return;
-    }
-    
-    let winners = winnerInput.split(',').map(name => name.trim()).filter(name => name !== '');
-    
-    if (winners.length === 0) {
-        alert('⚠️ Please enter at least one winner name!');
-        return;
-    }
+function endGameAndGoToWinner() {
+    if (!gameActive) return;
     
     gameActive = false;
     clearTimeout(timerTimeout);
     $('.timer-bar').css('animation-play-state', 'paused');
     
-    localStorage.setItem('megaScrambleWinners', JSON.stringify(winners));
+    // Go directly to winner page - no popups, no questions
     window.location.href = 'winner.html';
 }
 
@@ -427,13 +316,13 @@ $(document).ready(function () {
                     
                     timerTimeout = setTimeout(function() {
                         if (gameActive) {
-                            $('#winnerModal').fadeIn(300).css('display', 'flex');
+                            endGameAndGoToWinner();
                         }
                     }, 900000);
                     
                     $('.timer-bar').on('animationend', function() {
                         if (gameActive) {
-                            $('#winnerModal').fadeIn(300).css('display', 'flex');
+                            endGameAndGoToWinner();
                         }
                     });
                 } else {
@@ -453,7 +342,7 @@ function showQuestion() {
     if (!gameActive) return;
     
     if (currentIndex >= questions.length) {
-        $('#winnerModal').fadeIn(300).css('display', 'flex');
+        endGameAndGoToWinner();
         return;
     }
 
@@ -483,18 +372,7 @@ $('#nextBtn').on('click', function () {
 
 $('#endGameBtn').on('click', function() {
     if (gameActive) {
-        $('#winnerModal').fadeIn(300).css('display', 'flex');
-    }
-});
-
-$('#confirmWinnerBtn').on('click', function() {
-    declareWinners();
-});
-
-// Press Enter in input field to confirm
-$('#winnerNamesInput').on('keypress', function(e) {
-    if (e.which === 13) {
-        declareWinners();
+        endGameAndGoToWinner();
     }
 });
 
