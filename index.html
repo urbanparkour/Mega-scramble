@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Mega Scramble</title>
-    <link rel="preconnect" href		="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap" rel="stylesheet">
     <style>
@@ -66,7 +66,7 @@
         }
 
         .logo-container {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .logo {
@@ -78,7 +78,7 @@
 
         /* ===== CLASS SELECTOR SECTION (DROPDOWN) ===== */
         .class-selector {
-            margin: 10px auto 20px auto;
+            margin: 10px auto 30px auto;
             display: flex;
             gap: 15px;
             justify-content: center;
@@ -122,7 +122,6 @@
             justify-content: center;
             flex-wrap: wrap;
             margin-top: 20px;
-            margin-bottom: 30px;
         }
 
         .mode-btn {
@@ -149,14 +148,6 @@
             max-width: 350px;
             line-height: 1.3;
             text-align: center;
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .mode-btn.active-mode {
-            opacity: 1;
-            pointer-events: auto;
-            cursor: pointer;
         }
 
         .mode-btn.team-mode {
@@ -182,18 +173,18 @@
             transition: width 0.6s, height 0.6s;
         }
 
-        .mode-btn.active-mode:hover::before {
+        .mode-btn:hover::before {
             width: 600px;
             height: 600px;
         }
 
-        .mode-btn.active-mode:hover {
+        .mode-btn:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
             filter: brightness(1.1);
         }
 
-        .mode-btn.active-mode:active {
+        .mode-btn:active {
             transform: translateY(0) scale(0.98);
         }
 
@@ -201,62 +192,6 @@
             font-size: 28px;
             margin-right: 12px;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        /* Start Button - Centered below mode buttons */
-        .start-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px auto 20px auto;
-        }
-
-        .start-btn {
-            font-family: 'Fredoka One', cursive;
-            font-size: 32px;
-            padding: 20px 60px;
-            border: none;
-            border-radius: 80px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
-            color: white;
-            background: linear-gradient(145deg, #e67e22, #d35400);
-            border: 3px solid #f39c12;
-            display: inline-block;
-            min-width: 280px;
-        }
-
-        .start-btn:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.3);
-            filter: brightness(1.05);
-        }
-
-        .start-btn:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .tagline {
-            font-size: 22px;
-            color: #666;
-            margin: 15px 0;
-            font-family: 'Fredoka One', cursive;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            letter-spacing: 2px;
-        }
-
-        .selected-info {
-            font-size: 16px;
-            color: #2e7d32;
-            margin-top: 20px;
-            font-weight: bold;
-            background: #e8f5e9;
-            padding: 10px;
-            border-radius: 30px;
-            display: inline-block;
         }
 
         /* ===== TABLET & MOBILE OPTIMIZATIONS ===== */
@@ -274,12 +209,6 @@
                 font-size: 18px;
                 padding: 10px 20px;
                 min-width: 180px;
-            }
-            
-            .start-btn {
-                font-size: 28px;
-                padding: 16px 50px;
-                min-width: 260px;
             }
             
             .mode-btn {
@@ -305,15 +234,10 @@
                 margin-bottom: 5px;
             }
             
-            .tagline {
-                font-size: 18px;
-                margin: 10px 0;
-            }
-            
             .class-selector {
                 flex-direction: column;
                 gap: 10px;
-                margin: 5px auto 15px auto;
+                margin: 5px auto 20px auto;
             }
             
             .class-dropdown {
@@ -326,7 +250,7 @@
                 flex-direction: column;
                 gap: 15px;
                 align-items: center;
-                margin-bottom: 20px;
+                margin-top: 15px;
             }
             
             .mode-btn {
@@ -341,27 +265,12 @@
                 font-size: 24px;
                 margin-right: 10px;
             }
-            
-            .start-btn {
-                font-size: 24px;
-                padding: 14px 40px;
-                min-width: 240px;
-            }
-            
-            .selected-info {
-                font-size: 14px;
-                padding: 8px 15px;
-            }
         }
 
         @media (max-width: 480px) {
             .logo {
                 max-width: 400px;
                 width: 95%;
-            }
-            
-            .tagline {
-                font-size: 16px;
             }
             
             .class-dropdown {
@@ -379,12 +288,6 @@
             .mode-icon {
                 font-size: 22px;
                 margin-right: 8px;
-            }
-            
-            .start-btn {
-                font-size: 20px;
-                padding: 12px 30px;
-                min-width: 200px;
             }
         }
 
@@ -404,11 +307,6 @@
                 width: 60%;
             }
             
-            .tagline {
-                margin: 5px 0;
-                font-size: 16px;
-            }
-            
             .class-selector {
                 flex-direction: row;
                 margin: 5px auto;
@@ -422,19 +320,13 @@
             
             .mode-buttons {
                 flex-direction: row;
-                margin-bottom: 15px;
+                margin-top: 10px;
             }
             
             .mode-btn {
                 padding: 12px 15px;
                 font-size: 14px;
                 min-width: 180px;
-            }
-            
-            .start-btn {
-                font-size: 18px;
-                padding: 10px 30px;
-                min-width: 200px;
             }
         }
     </style>
@@ -444,17 +336,15 @@
         <div class="logo-container">
             <img src="Mega Scramble.png" alt="Mega Scramble" class="logo">
         </div>
-        
-        <div class="tagline">Fix the mix!</div>
 
         <!-- CLASS SELECTOR - DROPDOWN -->
         <div class="class-selector">
             <select id="classDropdown" class="class-dropdown">
                 <option value="">-- Select Class --</option>
-                <option value="2pm">2:00 PM Class</option>
-                <option value="3pm">3:00 PM Class</option>
-                <option value="4pm">4:00 PM Class</option>
-                <option value="5pm">5:00 PM Class</option>
+                <option value="2pm">2:00 PM Class (A1)</option>
+                <option value="3pm">3:00 PM Class (A1)</option>
+                <option value="4pm">4:00 PM Class (High A2)</option>
+                <option value="5pm">5:00 PM Class (Pre A1)</option>
             </select>
         </div>
 
@@ -469,13 +359,6 @@
                 Round 2:<br>Ultimate Battle
             </a>
         </div>
-
-        <!-- START BUTTON - CENTERED BELOW MODE BUTTONS -->
-        <div class="start-wrapper">
-            <button class="start-btn" id="startBtn">🚀 START!</button>
-        </div>
-
-        <div id="selectedInfo" class="selected-info"></div>
     </div>
 
     <script>
@@ -489,95 +372,50 @@
         
         // Get elements
         const classDropdown = document.getElementById('classDropdown');
-        const startBtn = document.getElementById('startBtn');
         const teamBuzzLink = document.getElementById('teamBuzzLink');
         const ultimateBattleLink = document.getElementById('ultimateBattleLink');
-        const selectedInfo = document.getElementById('selectedInfo');
         
-        let selectedClass = localStorage.getItem('megaScrambleClass') || '';
-        let gameStarted = false;
-        
-        // Function to update mode button states
-        function updateModeButtons() {
-            if (gameStarted && selectedClass) {
-                teamBuzzLink.classList.add('active-mode');
-                ultimateBattleLink.classList.add('active-mode');
-            } else {
-                teamBuzzLink.classList.remove('active-mode');
-                ultimateBattleLink.classList.remove('active-mode');
-            }
-        }
-        
-        // Function to set active class
+        // Function to update localStorage when class is selected
         function setActiveClass(classValue) {
-            selectedClass = classValue;
             if (classValue) {
                 localStorage.setItem('megaScrambleClass', classValue);
                 localStorage.setItem('megaScrambleCSV', CSV_FILES[classValue]);
-                selectedInfo.innerHTML = `✅ Class selected: ${classValue.toUpperCase()} (${CSV_FILES[classValue]})<br>📋 CSV includes headers: Question #, Scrambled sentence, Answer`;
-                selectedInfo.style.color = '#2e7d32';
-                selectedInfo.style.background = '#e8f5e9';
+                console.log('Class selected:', classValue);
+                console.log('CSV file:', CSV_FILES[classValue]);
             } else {
                 localStorage.removeItem('megaScrambleClass');
                 localStorage.removeItem('megaScrambleCSV');
-                selectedInfo.innerHTML = '';
             }
         }
         
-        // Handle Start button click
-        startBtn.addEventListener('click', function() {
+        // Handle class dropdown change
+        classDropdown.addEventListener('change', function() {
             const selectedOption = classDropdown.value;
-            
-            if (!selectedOption) {
-                alert('⚠️ Please select a class first! (2pm, 3pm, 4pm, or 5pm)');
-                return;
-            }
-            
-            gameStarted = true;
             setActiveClass(selectedOption);
-            updateModeButtons();
-            
-            // Visual feedback
-            startBtn.style.background = "linear-gradient(145deg, #27ae60, #1e8449)";
-            startBtn.innerHTML = "✅ READY!";
-            
-            setTimeout(() => {
-                startBtn.innerHTML = "🚀 START!";
-                startBtn.style.background = "linear-gradient(145deg, #e67e22, #d35400)";
-            }, 2000);
         });
         
-        // Handle mode links - ensure class is selected AND game has started
+        // Handle mode links - ensure class is selected before proceeding
         teamBuzzLink.addEventListener('click', function(e) {
-            if (!gameStarted || !selectedClass) {
+            const selectedClass = localStorage.getItem('megaScrambleClass');
+            if (!selectedClass) {
                 e.preventDefault();
-                alert('⚠️ Please select a class and click START! first.');
+                alert('⚠️ Please select a class first! (2pm, 3pm, 4pm, or 5pm)');
             }
         });
         
         ultimateBattleLink.addEventListener('click', function(e) {
-            if (!gameStarted || !selectedClass) {
+            const selectedClass = localStorage.getItem('megaScrambleClass');
+            if (!selectedClass) {
                 e.preventDefault();
-                alert('⚠️ Please select a class and click START! first.');
+                alert('⚠️ Please select a class first! (2pm, 3pm, 4pm, or 5pm)');
             }
         });
         
-        // Restore previous selection if exists
-        if (selectedClass) {
-            classDropdown.value = selectedClass;
-            gameStarted = true;
-            setActiveClass(selectedClass);
-            updateModeButtons();
+        // Restore previously selected class if exists
+        const savedClass = localStorage.getItem('megaScrambleClass');
+        if (savedClass) {
+            classDropdown.value = savedClass;
         }
-        
-        // Reset game started if dropdown changes
-        classDropdown.addEventListener('change', function() {
-            gameStarted = false;
-            updateModeButtons();
-            setActiveClass('');
-            startBtn.innerHTML = "🚀 START!";
-            startBtn.style.background = "linear-gradient(145deg, #e67e22, #d35400)";
-        });
     </script>
 </body>
 </html>
