@@ -26,42 +26,45 @@
             overflow: auto;
         }
 
+        /* ===== TOP TIMER BAR (1cm thick, bright yellow, right to left) ===== */
         .timer-container {
             position: fixed;
-            right: 0;
             top: 0;
-            height: 100vh;
-            width: 18px;
-            background: rgba(0,0,0,0.15);
-            z-index: 100;
+            left: 0;
+            width: 100%;
+            height: 1cm;
+            background: rgba(0,0,0,0.2);
+            z-index: 1000;
         }
 
         .timer-bar {
             width: 100%;
-            height: 0%;
-            background: #4ECDC4;
+            height: 100%;
+            background: #FFD700;
             position: absolute;
             top: 0;
-            left: 0;
-            animation: countdown 600s linear forwards;
-            box-shadow: 0 0 15px #4ECDC4;
+            right: 0;
+            animation: countdown 900s linear forwards;
+            box-shadow: 0 0 10px #FFD700;
+            border-radius: 0;
         }
 
         @keyframes countdown {
-            from { height: 0%; }
-            to { height: 100%; }
+            from { width: 100%; right: 0; }
+            to { width: 0%; right: 0; }
         }
 
+        /* ===== MAIN CARD (smaller, fits on screen) ===== */
         .question-container {
             background: white;
             border-radius: 30px;
-            padding: 40px;
-            max-width: 1200px;
+            padding: 25px 30px;
+            max-width: 1000px;
             width: 95%;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             text-align: center;
             margin: 20px auto;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -69,7 +72,7 @@
         }
 
         .question-container::-webkit-scrollbar {
-            width: 12px;
+            width: 8px;
         }
 
         .question-container::-webkit-scrollbar-track {
@@ -84,7 +87,7 @@
 
         .stage-title {
             font-family: 'Fredoka One', cursive;
-            font-size: 48px;
+            font-size: 36px;
             color: #1A3A5F;
             margin-bottom: 5px;
             flex-shrink: 0;
@@ -92,13 +95,13 @@
         }
 
         .class-badge {
-            font-size: 24px;
+            font-size: 18px;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             flex-shrink: 0;
             background: #f0f0f0;
             display: inline-block;
-            padding: 8px 30px;
+            padding: 5px 25px;
             border-radius: 50px;
             margin-top: 5px;
         }
@@ -110,67 +113,65 @@
 
         .question-number {
             font-family: 'Fredoka One', cursive;
-            font-size: 32px;
+            font-size: 24px;
             color: #4ECDC4;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             flex-shrink: 0;
         }
 
         .question-box {
             background: linear-gradient(135deg, #1A3A5F, #2B4F7C);
-            border-radius: 25px;
-            padding: 50px;
+            border-radius: 20px;
+            padding: 25px;
             color: white;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             flex-shrink: 0;
-            border: 3px solid #FFD700;
-            box-shadow: inset 0 -5px 0 rgba(0,0,0,0.2);
+            border: 2px solid #FFD700;
+            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
         }
 
         .scrambled-label {
             font-family: 'Fredoka One', cursive;
-            font-size: 28px;
+            font-size: 22px;
             color: #FFD700;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
         .scrambled-sentence {
-            font-size: 48px;
-            margin-bottom: 25px;
-            line-height: 1.5;
+            font-size: 32px;
+            margin-bottom: 15px;
+            line-height: 1.4;
             word-wrap: break-word;
             font-weight: bold;
-            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
         }
 
         .answer-section {
             background: #f8f9fa;
-            border-radius: 25px;
-            padding: 30px;
-            margin-bottom: 30px;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
             display: none;
-            max-height: 400px;
-            overflow-y: auto;
             flex-shrink: 0;
-            border: 3px solid #4ECDC4;
+            border: 2px solid #4ECDC4;
         }
 
         .answer-label {
             font-family: 'Fredoka One', cursive;
-            font-size: 32px;
+            font-size: 24px;
             color: #4ECDC4;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .answer-text {
-            font-size: 42px;
+            font-size: 30px;
             color: #1A3A5F;
-            padding: 25px;
+            padding: 15px;
             background: white;
-            border-radius: 15px;
-            border: 4px solid #4ECDC4;
+            border-radius: 12px;
+            border: 3px solid #4ECDC4;
             word-wrap: break-word;
             font-weight: bold;
         }
@@ -178,47 +179,47 @@
         .team-stats {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
-            padding: 20px;
+            margin: 15px 0;
+            padding: 15px;
             background: linear-gradient(145deg, #FFD700, #FDB931);
             border-radius: 20px;
             color: #1A3A5F;
             font-weight: bold;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
         }
 
         .team-stat {
-            font-size: 24px;
+            font-size: 20px;
             text-align: center;
             min-width: 100px;
         }
 
         .team-stat span {
-            font-size: 36px;
-            margin-right: 10px;
+            font-size: 28px;
+            margin-right: 8px;
         }
 
         .team-stat input {
-            width: 80px;
-            padding: 8px;
-            font-size: 20px;
+            width: 70px;
+            padding: 6px;
+            font-size: 18px;
             text-align: center;
             font-family: 'Fredoka One', cursive;
             border: 2px solid #1A3A5F;
-            border-radius: 15px;
-            margin-left: 10px;
+            border-radius: 12px;
+            margin-left: 8px;
         }
 
         .controls {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 15px;
-            padding: 20px 0 10px 0;
+            margin-top: 10px;
+            padding: 15px 0 5px 0;
             background: white;
-            border-top: 3px solid #f0f0f0;
+            border-top: 2px solid #f0f0f0;
             flex-shrink: 0;
             position: sticky;
             bottom: 0;
@@ -227,35 +228,35 @@
 
         .control-btn {
             font-family: 'Fredoka One', cursive;
-            font-size: 28px;
-            padding: 20px 45px;
+            font-size: 22px;
+            padding: 12px 30px;
             border: none;
-            border-radius: 60px;
+            border-radius: 50px;
             cursor: pointer;
             color: white;
             text-transform: uppercase;
-            box-shadow: 0 8px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
             transition: all 0.1s ease;
-            min-width: 200px;
+            min-width: 160px;
         }
 
         .control-btn:active {
-            transform: translateY(5px);
-            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
         }
 
         .btn-show { 
             background: #4ECDC4; 
-            box-shadow: 0 8px 0 #2A8F87;
+            box-shadow: 0 5px 0 #2A8F87;
         }
         .btn-next { 
             background: #FFD700; 
             color: #333;
-            box-shadow: 0 8px 0 #C4A000;
+            box-shadow: 0 5px 0 #C4A000;
         }
         .btn-home { 
             background: #95a5a6; 
-            box-shadow: 0 8px 0 #6C7A7D;
+            box-shadow: 0 5px 0 #6C7A7D;
         }
 
         .hidden { display: none !important; }
@@ -268,17 +269,17 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
+            z-index: 2000;
             justify-content: center;
             align-items: center;
         }
 
         .modal-content {
             background: white;
-            padding: 50px;
-            border-radius: 50px;
+            padding: 40px;
+            border-radius: 40px;
             text-align: center;
-            max-width: 600px;
+            max-width: 500px;
             width: 90%;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             animation: modalPop 0.5s ease-out;
@@ -290,50 +291,54 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .modal-icon { font-size: 100px; margin-bottom: 25px; }
-        .modal-content h2 { font-family: 'Fredoka One', cursive; font-size: 56px; color: #1A3A5F; margin-bottom: 25px; }
-        .modal-content p { font-size: 28px; margin-bottom: 35px; color: #333; }
+        .modal-icon { font-size: 80px; margin-bottom: 20px; }
+        .modal-content h2 { font-family: 'Fredoka One', cursive; font-size: 42px; color: #1A3A5F; margin-bottom: 20px; }
+        .modal-content p { font-size: 24px; margin-bottom: 30px; color: #333; }
 
         .modal-btn {
             font-family: 'Fredoka One', cursive;
-            font-size: 28px;
-            padding: 18px 60px;
+            font-size: 24px;
+            padding: 12px 40px;
             background: linear-gradient(145deg, #1A3A5F, #0F2A44);
             border: none;
-            border-radius: 60px;
+            border-radius: 50px;
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 0 #0A1A2F;
+            box-shadow: 0 5px 0 #0A1A2F;
         }
 
         .modal-btn:active {
-            transform: translateY(5px);
-            box-shadow: 0 3px 0 #0A1A2F;
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #0A1A2F;
         }
 
-        @media (max-width: 1024px) {
-            .stage-title { font-size: 42px; }
-            .scrambled-sentence { font-size: 42px; }
-            .answer-text { font-size: 38px; }
-            .control-btn { font-size: 24px; padding: 16px 35px; min-width: 180px; }
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .stage-title { font-size: 28px; }
+            .scrambled-sentence { font-size: 24px; }
+            .answer-text { font-size: 22px; }
+            .control-btn { font-size: 18px; padding: 10px 20px; min-width: 130px; }
+            .team-stat { font-size: 16px; }
+            .team-stat span { font-size: 22px; }
+            .team-stat input { width: 55px; font-size: 14px; }
+            .question-box { padding: 18px; }
+            .answer-section { padding: 15px; }
+            .class-badge { font-size: 14px; }
         }
 
-        @media (max-width: 767px) {
-            .stage-title { font-size: 36px; }
-            .scrambled-sentence { font-size: 32px; }
-            .answer-text { font-size: 28px; }
-            .control-btn { font-size: 22px; padding: 15px 30px; min-width: 160px; }
-            .question-box { padding: 30px; }
-            .team-stat { font-size: 18px; }
-            .team-stat span { font-size: 28px; }
-            .team-stat input { width: 65px; font-size: 16px; }
+        @media (max-width: 480px) {
+            .scrambled-sentence { font-size: 20px; }
+            .answer-text { font-size: 18px; }
+            .control-btn { font-size: 16px; padding: 8px 15px; min-width: 110px; }
         }
     </style>
 </head>
 
 <body>
 
+<!-- TOP TIMER BAR (1cm thick, bright yellow, counts down from right to left) -->
 <div class="timer-container">
     <div class="timer-bar"></div>
 </div>
@@ -400,7 +405,7 @@ const classNames = {
 };
 
 $(document).ready(function () {
-    // IMPORTANT: Get selected class from localStorage (set by index.html)
+    // Get selected class from localStorage (set by index.html)
     const selectedClass = localStorage.getItem('megaScrambleClass');
     const selectedCSV = localStorage.getItem('megaScrambleCSV');
     
@@ -435,11 +440,10 @@ $(document).ready(function () {
             }
             
             if (results.data && results.data.length > 0) {
-                // IMPORTANT: Map CSV columns to our format
+                // Map CSV columns to our format
                 // Your CSV headers: "Question #", "Scrambled sentence", "Answer"
                 questions = results.data
                     .filter(row => {
-                        // Check for scrambled sentence column (exact match from your CSV)
                         const scrambledCol = row['Scrambled sentence'];
                         const answerCol = row['Answer'];
                         return scrambledCol && answerCol && scrambledCol.trim() !== '';
@@ -455,17 +459,17 @@ $(document).ready(function () {
                     alert('No valid questions found. Please check your CSV format.');
                     console.log('Available columns in CSV:', Object.keys(results.data[0] || {}));
                 } else {
-                    // Shuffle questions for variety
+                    // Shuffle questions
                     for (let i = questions.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
                         [questions[i], questions[j]] = [questions[j], questions[i]];
                     }
                     showQuestion();
                     
-                    // Start timer (10 minutes = 600000ms)
+                    // Start timer (15 minutes = 900000ms)
                     timerTimeout = setTimeout(function() {
                         showTimesUpModal();
-                    }, 600000);
+                    }, 900000);
                     
                     $('.timer-bar').on('animationend', function() {
                         showTimesUpModal();
