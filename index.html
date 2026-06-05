@@ -67,7 +67,6 @@
 
         .logo-container {
             margin-bottom: 10px;
-            /* BOUNCE ANIMATION REMOVED */
         }
 
         .logo {
@@ -77,8 +76,8 @@
             display: block;
         }
 
-        /* ===== LEVEL SELECTOR SECTION ===== */
-        .level-selector {
+        /* ===== CLASS SELECTOR SECTION (DROPDOWN) ===== */
+        .class-selector {
             margin: 10px auto 20px auto;
             display: flex;
             gap: 15px;
@@ -88,61 +87,29 @@
             transition: all 0.3s ease;
         }
 
-        .level-btn {
+        .class-dropdown {
             font-family: 'Fredoka One', cursive;
-            font-size: 18px;
+            font-size: 20px;
             padding: 12px 25px;
-            border: none;
+            border: 3px solid #ffd700;
             border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: #1a3a5f;
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            min-width: 160px;
-            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            text-align: center;
         }
 
-        .level-btn.beginner {
-            background: #2e7d32;
-            border-color: #4CAF50;
+        .class-dropdown:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background: #0f2a44;
         }
-        
-        .level-btn.intermediate {
-            background: #FFD700;
-            border-color: #FDB931;
+
+        .class-dropdown option {
+            background: white;
             color: #333;
-        }
-        
-        .level-btn.advanced {
-            background: #c62828;
-            border-color: #f44336;
-        }
-
-        .level-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            filter: brightness(1.1);
-        }
-
-        .level-btn.selected {
-            transform: scale(1.1);
-            border: 3px solid #333;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
-            z-index: 10;
-            filter: brightness(1.1);
-        }
-
-        .level-selector:has(.selected) .level-btn:not(.selected) {
-            transform: scale(0.8);
-            opacity: 0.7;
-        }
-
-        .level-selector:has(.selected) .level-btn:not(.selected):hover {
-            transform: scale(0.85);
-            opacity: 0.9;
         }
 
         /* ===== MODE BUTTONS SECTION ===== */
@@ -154,7 +121,8 @@
             padding: 0 10px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 5px;
+            margin-top: 20px;
+            margin-bottom: 30px;
         }
 
         .mode-btn {
@@ -181,6 +149,14 @@
             max-width: 350px;
             line-height: 1.3;
             text-align: center;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .mode-btn.active-mode {
+            opacity: 1;
+            pointer-events: auto;
+            cursor: pointer;
         }
 
         .mode-btn.team-mode {
@@ -206,18 +182,18 @@
             transition: width 0.6s, height 0.6s;
         }
 
-        .mode-btn:hover::before {
+        .mode-btn.active-mode:hover::before {
             width: 600px;
             height: 600px;
         }
 
-        .mode-btn:hover {
+        .mode-btn.active-mode:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
             filter: brightness(1.1);
         }
 
-        .mode-btn:active {
+        .mode-btn.active-mode:active {
             transform: translateY(0) scale(0.98);
         }
 
@@ -227,7 +203,41 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
-        /* Sparkle effect removed - no image file available */
+        /* Start Button - Centered below mode buttons */
+        .start-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px auto 20px auto;
+        }
+
+        .start-btn {
+            font-family: 'Fredoka One', cursive;
+            font-size: 32px;
+            padding: 20px 60px;
+            border: none;
+            border-radius: 80px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+            color: white;
+            background: linear-gradient(145deg, #e67e22, #d35400);
+            border: 3px solid #f39c12;
+            display: inline-block;
+            min-width: 280px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.05);
+        }
+
+        .start-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
 
         .tagline {
             font-size: 22px;
@@ -236,6 +246,17 @@
             font-family: 'Fredoka One', cursive;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
             letter-spacing: 2px;
+        }
+
+        .selected-info {
+            font-size: 16px;
+            color: #2e7d32;
+            margin-top: 20px;
+            font-weight: bold;
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 30px;
+            display: inline-block;
         }
 
         /* ===== TABLET & MOBILE OPTIMIZATIONS ===== */
@@ -249,10 +270,16 @@
                 width: 85%;
             }
             
-            .level-btn {
-                font-size: 16px;
+            .class-dropdown {
+                font-size: 18px;
                 padding: 10px 20px;
-                min-width: 140px;
+                min-width: 180px;
+            }
+            
+            .start-btn {
+                font-size: 28px;
+                padding: 16px 50px;
+                min-width: 260px;
             }
             
             .mode-btn {
@@ -283,31 +310,23 @@
                 margin: 10px 0;
             }
             
-            .level-selector {
+            .class-selector {
                 flex-direction: column;
                 gap: 10px;
                 margin: 5px auto 15px auto;
             }
             
-            .level-btn {
+            .class-dropdown {
                 width: 250px;
                 font-size: 16px;
                 padding: 12px 20px;
-                white-space: normal;
-            }
-            
-            .level-btn.selected {
-                transform: scale(1.05);
-            }
-            
-            .level-selector:has(.selected) .level-btn:not(.selected) {
-                transform: scale(0.9);
             }
             
             .mode-buttons {
                 flex-direction: column;
                 gap: 15px;
                 align-items: center;
+                margin-bottom: 20px;
             }
             
             .mode-btn {
@@ -322,6 +341,17 @@
                 font-size: 24px;
                 margin-right: 10px;
             }
+            
+            .start-btn {
+                font-size: 24px;
+                padding: 14px 40px;
+                min-width: 240px;
+            }
+            
+            .selected-info {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -334,7 +364,7 @@
                 font-size: 16px;
             }
             
-            .level-btn {
+            .class-dropdown {
                 width: 220px;
                 font-size: 14px;
                 padding: 10px 15px;
@@ -349,6 +379,12 @@
             .mode-icon {
                 font-size: 22px;
                 margin-right: 8px;
+            }
+            
+            .start-btn {
+                font-size: 20px;
+                padding: 12px 30px;
+                min-width: 200px;
             }
         }
 
@@ -373,12 +409,12 @@
                 font-size: 16px;
             }
             
-            .level-selector {
+            .class-selector {
                 flex-direction: row;
                 margin: 5px auto;
             }
             
-            .level-btn {
+            .class-dropdown {
                 padding: 8px 15px;
                 font-size: 14px;
                 min-width: 120px;
@@ -386,6 +422,7 @@
             
             .mode-buttons {
                 flex-direction: row;
+                margin-bottom: 15px;
             }
             
             .mode-btn {
@@ -393,108 +430,153 @@
                 font-size: 14px;
                 min-width: 180px;
             }
+            
+            .start-btn {
+                font-size: 18px;
+                padding: 10px 30px;
+                min-width: 200px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Sparkle effect removed - no image file available -->
-
     <div class="container">
         <div class="logo-container">
-            <!-- UPDATED: Using your uploaded Mega Scramble.png logo -->
             <img src="Mega Scramble.png" alt="Mega Scramble" class="logo">
         </div>
         
         <div class="tagline">Fix the mix!</div>
 
-        <!-- LEVEL SELECTOR - THREE BUTTONS -->
-        <div class="level-selector">
-            <button class="level-btn beginner" id="beginnerBtn">🌟 BEGINNER</button>
-            <button class="level-btn intermediate" id="intermediateBtn">📚 INTERMEDIATE</button>
-            <button class="level-btn advanced" id="advancedBtn">⚡ ADVANCED</button>
+        <!-- CLASS SELECTOR - DROPDOWN -->
+        <div class="class-selector">
+            <select id="classDropdown" class="class-dropdown">
+                <option value="">-- Select Class --</option>
+                <option value="2pm">2:00 PM Class (A1)</option>
+                <option value="3pm">3:00 PM Class (A1)</option>
+                <option value="4pm">4:00 PM Class (High A2)</option>
+                <option value="5pm">5:00 PM Class (Pre A1)</option>
+            </select>
         </div>
 
         <!-- TWO GAME MODE BUTTONS -->
         <div class="mode-buttons">
-            <a href="mode1.html" class="mode-btn team-mode" id="teamBattleLink">
+            <a href="mode1.html" class="mode-btn team-mode" id="teamBuzzLink">
                 <span class="mode-icon">🎯</span>
-                Round 1:<br>Team Battle
+                Round 1:<br>Team Buzz
             </a>
             <a href="mode2.html" class="mode-btn battle-mode" id="ultimateBattleLink">
                 <span class="mode-icon">👑</span>
                 Round 2:<br>Ultimate Battle
             </a>
         </div>
+
+        <!-- START BUTTON - CENTERED BELOW MODE BUTTONS -->
+        <div class="start-wrapper">
+            <button class="start-btn" id="startBtn">🚀 START!</button>
+        </div>
+
+        <div id="selectedInfo" class="selected-info"></div>
     </div>
 
     <script>
-        // Define the CSV files for each level
+        // CSV files for each class (with headers: Question #, Scrambled sentence, Answer)
         const CSV_FILES = {
-            beginner: 'beginner_week1.csv',
-            intermediate: 'intermediate_week1.csv',
-            advanced: 'advanced_week1.csv'
+            '2pm': '2pm.csv',
+            '3pm': '3pm.csv',
+            '4pm': '4pm.csv',
+            '5pm': '5pm.csv'
         };
         
-        // Default to beginner if nothing selected
-        let selectedLevel = localStorage.getItem('megaScrambleLevel') || 'beginner';
+        // Get elements
+        const classDropdown = document.getElementById('classDropdown');
+        const startBtn = document.getElementById('startBtn');
+        const teamBuzzLink = document.getElementById('teamBuzzLink');
+        const ultimateBattleLink = document.getElementById('ultimateBattleLink');
+        const selectedInfo = document.getElementById('selectedInfo');
         
-        // Get button elements
-        const beginnerBtn = document.getElementById('beginnerBtn');
-        const intermediateBtn = document.getElementById('intermediateBtn');
-        const advancedBtn = document.getElementById('advancedBtn');
+        let selectedClass = localStorage.getItem('megaScrambleClass') || '';
+        let gameStarted = false;
         
-        function setActiveLevel(level) {
-            selectedLevel = level;
-            localStorage.setItem('megaScrambleLevel', level);
-            localStorage.setItem('megaScrambleCSV', CSV_FILES[level]);
-            
-            // Remove selected class from all buttons
-            beginnerBtn.classList.remove('selected');
-            intermediateBtn.classList.remove('selected');
-            advancedBtn.classList.remove('selected');
-            
-            // Add selected class to the active button
-            if (level === 'beginner') {
-                beginnerBtn.classList.add('selected');
-            } else if (level === 'intermediate') {
-                intermediateBtn.classList.add('selected');
+        // Function to update mode button states
+        function updateModeButtons() {
+            if (gameStarted && selectedClass) {
+                teamBuzzLink.classList.add('active-mode');
+                ultimateBattleLink.classList.add('active-mode');
             } else {
-                advancedBtn.classList.add('selected');
+                teamBuzzLink.classList.remove('active-mode');
+                ultimateBattleLink.classList.remove('active-mode');
             }
-            
-            console.log('Selected level:', level);
-            console.log('Selected CSV:', CSV_FILES[level]);
         }
         
-        // Set initial active state
-        setActiveLevel(selectedLevel);
+        // Function to set active class
+        function setActiveClass(classValue) {
+            selectedClass = classValue;
+            if (classValue) {
+                localStorage.setItem('megaScrambleClass', classValue);
+                localStorage.setItem('megaScrambleCSV', CSV_FILES[classValue]);
+                selectedInfo.innerHTML = `✅ Class selected: ${classValue.toUpperCase()} (${CSV_FILES[classValue]})<br>📋 CSV includes headers: Question #, Scrambled sentence, Answer`;
+                selectedInfo.style.color = '#2e7d32';
+                selectedInfo.style.background = '#e8f5e9';
+            } else {
+                localStorage.removeItem('megaScrambleClass');
+                localStorage.removeItem('megaScrambleCSV');
+                selectedInfo.innerHTML = '';
+            }
+        }
         
-        // Add click handlers
-        beginnerBtn.addEventListener('click', function() {
-            setActiveLevel('beginner');
+        // Handle Start button click
+        startBtn.addEventListener('click', function() {
+            const selectedOption = classDropdown.value;
+            
+            if (!selectedOption) {
+                alert('⚠️ Please select a class first! (2pm, 3pm, 4pm, or 5pm)');
+                return;
+            }
+            
+            gameStarted = true;
+            setActiveClass(selectedOption);
+            updateModeButtons();
+            
+            // Visual feedback
+            startBtn.style.background = "linear-gradient(145deg, #27ae60, #1e8449)";
+            startBtn.innerHTML = "✅ READY!";
+            
+            setTimeout(() => {
+                startBtn.innerHTML = "🚀 START!";
+                startBtn.style.background = "linear-gradient(145deg, #e67e22, #d35400)";
+            }, 2000);
         });
         
-        intermediateBtn.addEventListener('click', function() {
-            setActiveLevel('intermediate');
-        });
-        
-        advancedBtn.addEventListener('click', function() {
-            setActiveLevel('advanced');
-        });
-
-        // Handle mode links - ensure level is selected
-        document.getElementById('teamBattleLink').addEventListener('click', function(e) {
-            if (!localStorage.getItem('megaScrambleCSV')) {
+        // Handle mode links - ensure class is selected AND game has started
+        teamBuzzLink.addEventListener('click', function(e) {
+            if (!gameStarted || !selectedClass) {
                 e.preventDefault();
-                alert('⚠️ Please select a difficulty level first!');
+                alert('⚠️ Please select a class and click START! first.');
             }
         });
-
-        document.getElementById('ultimateBattleLink').addEventListener('click', function(e) {
-            if (!localStorage.getItem('megaScrambleCSV')) {
+        
+        ultimateBattleLink.addEventListener('click', function(e) {
+            if (!gameStarted || !selectedClass) {
                 e.preventDefault();
-                alert('⚠️ Please select a difficulty level first!');
+                alert('⚠️ Please select a class and click START! first.');
             }
+        });
+        
+        // Restore previous selection if exists
+        if (selectedClass) {
+            classDropdown.value = selectedClass;
+            gameStarted = true;
+            setActiveClass(selectedClass);
+            updateModeButtons();
+        }
+        
+        // Reset game started if dropdown changes
+        classDropdown.addEventListener('change', function() {
+            gameStarted = false;
+            updateModeButtons();
+            setActiveClass('');
+            startBtn.innerHTML = "🚀 START!";
+            startBtn.style.background = "linear-gradient(145deg, #e67e22, #d35400)";
         });
     </script>
 </body>
