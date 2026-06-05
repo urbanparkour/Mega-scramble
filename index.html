@@ -2,582 +2,553 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Mega Scramble</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Mega Scramble - Round 1: Team Buzz</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bubblegum+Sans&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-        }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Bubblegum Sans', cursive;
+            background: linear-gradient(135deg, #1A3A5F, #0F2A44);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            background: #FFFFFF;
-            padding: 15px;
+            padding: 20px;
+            overflow: auto;
         }
 
-        body::before {
-            content: '';
+        /* Timer Bar */
+        .timer-container {
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            width: 18px;
+            background: rgba(0,0,0,0.15);
+            z-index: 100;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 0%;
+            background: #4ECDC4;
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
-            pointer-events: none;
+            animation: countdown 600s linear forwards;
+            box-shadow: 0 0 15px #4ECDC4;
         }
 
-        .container {
-            text-align: center;
-            z-index: 1;
-            animation: slideIn 0.8s ease-out;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px;
+        @keyframes countdown {
+            from { height: 0%; }
+            to { height: 100%; }
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo-container {
-            margin-bottom: 10px;
-        }
-
-        .logo {
-            max-width: 700px;
-            width: 90%;
-            margin: 0 auto;
-            display: block;
-        }
-
-        /* ===== CLASS SELECTOR SECTION (DROPDOWN) ===== */
-        .class-selector {
-            margin: 10px auto 20px auto;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .class-dropdown {
-            font-family: 'Fredoka One', cursive;
-            font-size: 20px;
-            padding: 12px 25px;
-            border: 3px solid #ffd700;
-            border-radius: 50px;
-            background: #1a3a5f;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 200px;
-            text-align: center;
-        }
-
-        .class-dropdown:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            background: #0f2a44;
-        }
-
-        .class-dropdown option {
+        /* Main Card */
+        .question-container {
             background: white;
-            color: #333;
-        }
-
-        /* ===== MODE BUTTONS SECTION ===== */
-        .mode-buttons {
-            display: flex;
-            gap: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
-
-        .mode-btn {
-            font-family: 'Fredoka One', cursive;
-            font-size: 20px;
-            padding: 20px 30px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            flex: 1 1 auto;
-            min-width: 250px;
-            max-width: 350px;
-            line-height: 1.3;
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 1200px;
+            width: 95%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             text-align: center;
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .mode-btn.active-mode {
-            opacity: 1;
-            pointer-events: auto;
-            cursor: pointer;
-        }
-
-        .mode-btn.team-mode {
-            background: linear-gradient(145deg, #1A3A5F, #0F2A44);
-            border: 2px solid #2B4F7C;
-        }
-
-        .mode-btn.battle-mode {
-            background: linear-gradient(145deg, #6B4E9E, #4A2C7A);
-            border: 2px solid #8A6CC7;
-        }
-
-        .mode-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .mode-btn.active-mode:hover::before {
-            width: 600px;
-            height: 600px;
-        }
-
-        .mode-btn.active-mode:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
-            filter: brightness(1.1);
-        }
-
-        .mode-btn.active-mode:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .mode-icon {
-            font-size: 28px;
-            margin-right: 12px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        /* Start Button - Centered below mode buttons */
-        .start-wrapper {
+            margin: 20px auto;
+            max-height: 90vh;
+            overflow-y: auto;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px auto 20px auto;
+            flex-direction: column;
+            border: 3px solid #FFD700;
         }
 
-        .start-btn {
+        .question-container::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .question-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .question-container::-webkit-scrollbar-thumb {
+            background: #1A3A5F;
+            border-radius: 10px;
+        }
+
+        .stage-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 48px;
+            color: #1A3A5F;
+            margin-bottom: 5px;
+            flex-shrink: 0;
+            text-shadow: 2px 2px 0 #FFD700;
+        }
+
+        .class-badge {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+            background: #f0f0f0;
+            display: inline-block;
+            padding: 8px 30px;
+            border-radius: 50px;
+            margin-top: 5px;
+        }
+
+        .class-badge span {
+            font-weight: bold;
+            color: #1A3A5F;
+        }
+
+        .question-number {
             font-family: 'Fredoka One', cursive;
             font-size: 32px;
-            padding: 20px 60px;
-            border: none;
-            border-radius: 80px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+            color: #4ECDC4;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, #1A3A5F, #2B4F7C);
+            border-radius: 25px;
+            padding: 50px;
             color: white;
-            background: linear-gradient(145deg, #e67e22, #d35400);
-            border: 3px solid #f39c12;
-            display: inline-block;
-            min-width: 280px;
+            margin-bottom: 30px;
+            flex-shrink: 0;
+            border: 3px solid #FFD700;
+            box-shadow: inset 0 -5px 0 rgba(0,0,0,0.2);
         }
 
-        .start-btn:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.3);
-            filter: brightness(1.05);
-        }
-
-        .start-btn:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .tagline {
-            font-size: 22px;
-            color: #666;
-            margin: 15px 0;
+        .scrambled-label {
             font-family: 'Fredoka One', cursive;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-size: 28px;
+            color: #FFD700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        .selected-info {
-            font-size: 16px;
-            color: #2e7d32;
-            margin-top: 20px;
+        .scrambled-sentence {
+            font-size: 48px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            word-wrap: break-word;
             font-weight: bold;
-            background: #e8f5e9;
-            padding: 10px;
-            border-radius: 30px;
-            display: inline-block;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
         }
 
-        /* ===== TABLET & MOBILE OPTIMIZATIONS ===== */
+        .answer-section {
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            border: 3px solid #4ECDC4;
+        }
+
+        .answer-label {
+            font-family: 'Fredoka One', cursive;
+            font-size: 32px;
+            color: #4ECDC4;
+            margin-bottom: 20px;
+        }
+
+        .answer-text {
+            font-size: 42px;
+            color: #1A3A5F;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            border: 4px solid #4ECDC4;
+            word-wrap: break-word;
+            font-weight: bold;
+        }
+
+        .team-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(145deg, #FFD700, #FDB931);
+            border-radius: 20px;
+            color: #1A3A5F;
+            font-weight: bold;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .team-stat {
+            font-size: 24px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .team-stat span {
+            font-size: 36px;
+            margin-right: 10px;
+        }
+
+        .team-stat input {
+            width: 70px;
+            padding: 8px;
+            font-size: 20px;
+            text-align: center;
+            font-family: 'Fredoka One', cursive;
+            border: 2px solid #1A3A5F;
+            border-radius: 15px;
+            margin-left: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding: 20px 0 10px 0;
+            background: white;
+            border-top: 3px solid #f0f0f0;
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        .control-btn {
+            font-family: 'Fredoka One', cursive;
+            font-size: 28px;
+            padding: 20px 45px;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            color: white;
+            text-transform: uppercase;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.2);
+            transition: all 0.1s ease;
+            min-width: 200px;
+        }
+
+        .control-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .btn-show { 
+            background: #4ECDC4; 
+            box-shadow: 0 8px 0 #2A8F87;
+        }
+        .btn-next { 
+            background: #FFD700; 
+            color: #333;
+            box-shadow: 0 8px 0 #C4A000;
+        }
+        .btn-home { 
+            background: #95a5a6; 
+            box-shadow: 0 8px 0 #6C7A7D;
+        }
+
+        .hidden { display: none !important; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 50px;
+            border-radius: 50px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: modalPop 0.5s ease-out;
+            border: 5px solid #FFD700;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon { font-size: 100px; margin-bottom: 25px; }
+        .modal-content h2 { font-family: 'Fredoka One', cursive; font-size: 56px; color: #1A3A5F; margin-bottom: 25px; }
+        .modal-content p { font-size: 28px; margin-bottom: 35px; color: #333; }
+
+        .modal-btn {
+            font-family: 'Fredoka One', cursive;
+            font-size: 28px;
+            padding: 18px 60px;
+            background: linear-gradient(145deg, #1A3A5F, #0F2A44);
+            border: none;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 0 #0A1A2F;
+        }
+
+        .modal-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 3px 0 #0A1A2F;
+        }
+
         @media (max-width: 1024px) {
-            .container {
-                padding: 5px;
-            }
-            
-            .logo {
-                max-width: 600px;
-                width: 85%;
-            }
-            
-            .class-dropdown {
-                font-size: 18px;
-                padding: 10px 20px;
-                min-width: 180px;
-            }
-            
-            .start-btn {
-                font-size: 28px;
-                padding: 16px 50px;
-                min-width: 260px;
-            }
-            
-            .mode-btn {
-                font-size: 18px;
-                padding: 18px 25px;
-                min-width: 220px;
-            }
+            .stage-title { font-size: 42px; }
+            .scrambled-sentence { font-size: 42px; }
+            .answer-text { font-size: 38px; }
+            .control-btn { font-size: 24px; padding: 16px 35px; min-width: 180px; }
         }
 
-        @media (max-width: 768px) {
-            body {
-                align-items: flex-start;
-                padding-top: 30px;
-            }
-            
-            .container {
-                padding: 5px;
-            }
-            
-            .logo {
-                max-width: 500px;
-                width: 80%;
-                margin-bottom: 5px;
-            }
-            
-            .tagline {
-                font-size: 18px;
-                margin: 10px 0;
-            }
-            
-            .class-selector {
-                flex-direction: column;
-                gap: 10px;
-                margin: 5px auto 15px auto;
-            }
-            
-            .class-dropdown {
-                width: 250px;
-                font-size: 16px;
-                padding: 12px 20px;
-            }
-            
-            .mode-buttons {
-                flex-direction: column;
-                gap: 15px;
-                align-items: center;
-                margin-bottom: 20px;
-            }
-            
-            .mode-btn {
-                font-size: 18px;
-                padding: 18px 20px;
-                min-width: 280px;
-                width: 100%;
-                max-width: 320px;
-            }
-            
-            .mode-icon {
-                font-size: 24px;
-                margin-right: 10px;
-            }
-            
-            .start-btn {
-                font-size: 24px;
-                padding: 14px 40px;
-                min-width: 240px;
-            }
-            
-            .selected-info {
-                font-size: 14px;
-                padding: 8px 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                max-width: 400px;
-                width: 95%;
-            }
-            
-            .tagline {
-                font-size: 16px;
-            }
-            
-            .class-dropdown {
-                width: 220px;
-                font-size: 14px;
-                padding: 10px 15px;
-            }
-            
-            .mode-btn {
-                font-size: 16px;
-                padding: 15px 15px;
-                min-width: 240px;
-            }
-            
-            .mode-icon {
-                font-size: 22px;
-                margin-right: 8px;
-            }
-            
-            .start-btn {
-                font-size: 20px;
-                padding: 12px 30px;
-                min-width: 200px;
-            }
-        }
-
-        /* Landscape orientation on tablets */
-        @media (max-height: 600px) and (orientation: landscape) {
-            body {
-                align-items: center;
-                padding: 10px;
-            }
-            
-            .container {
-                padding: 5px;
-            }
-            
-            .logo {
-                max-width: 400px;
-                width: 60%;
-            }
-            
-            .tagline {
-                margin: 5px 0;
-                font-size: 16px;
-            }
-            
-            .class-selector {
-                flex-direction: row;
-                margin: 5px auto;
-            }
-            
-            .class-dropdown {
-                padding: 8px 15px;
-                font-size: 14px;
-                min-width: 120px;
-            }
-            
-            .mode-buttons {
-                flex-direction: row;
-                margin-bottom: 15px;
-            }
-            
-            .mode-btn {
-                padding: 12px 15px;
-                font-size: 14px;
-                min-width: 180px;
-            }
-            
-            .start-btn {
-                font-size: 18px;
-                padding: 10px 30px;
-                min-width: 200px;
-            }
+        @media (max-width: 767px) {
+            .stage-title { font-size: 36px; }
+            .scrambled-sentence { font-size: 32px; }
+            .answer-text { font-size: 28px; }
+            .control-btn { font-size: 22px; padding: 15px 30px; min-width: 160px; }
+            .question-box { padding: 30px; }
+            .team-stat { font-size: 18px; }
+            .team-stat span { font-size: 28px; }
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="logo-container">
-            <img src="Mega Scramble.png" alt="Mega Scramble" class="logo">
-        </div>
-        
-        <div class="tagline">Fix the mix!</div>
 
-        <!-- CLASS SELECTOR - DROPDOWN -->
-        <div class="class-selector">
-            <select id="classDropdown" class="class-dropdown">
-                <option value="">-- Select Class --</option>
-                <option value="2pm">2:00 PM Class (A1)</option>
-                <option value="3pm">3:00 PM Class (A1)</option>
-                <option value="4pm">4:00 PM Class (High A2)</option>
-                <option value="5pm">5:00 PM Class (Pre A1)</option>
-            </select>
-        </div>
+<div class="timer-container">
+    <div class="timer-bar"></div>
+</div>
 
-        <!-- TWO GAME MODE BUTTONS -->
-        <div class="mode-buttons">
-            <a href="mode1.html" class="mode-btn team-mode" id="teamBuzzLink">
-                <span class="mode-icon">🎯</span>
-                Round 1:<br>Team Buzz
-            </a>
-            <a href="mode2.html" class="mode-btn battle-mode" id="ultimateBattleLink">
-                <span class="mode-icon">👑</span>
-                Round 2:<br>Ultimate Battle
-            </a>
-        </div>
+<div class="question-container">
+    <h1 class="stage-title">🎯 ROUND 1: TEAM BUZZ</h1>
+    <div class="class-badge" id="classDisplay">Loading class...</div>
 
-        <!-- START BUTTON - CENTERED BELOW MODE BUTTONS -->
-        <div class="start-wrapper">
-            <button class="start-btn" id="startBtn">🚀 START!</button>
-        </div>
+    <div class="question-number" id="questionNumber"></div>
 
-        <div id="selectedInfo" class="selected-info"></div>
+    <div class="question-box">
+        <div class="scrambled-label">🔀 SCRAMBLED SENTENCE</div>
+        <div class="scrambled-sentence" id="scrambledSentence">Loading questions...</div>
     </div>
 
-    <script>
-        // CSV files for each class (with headers: Question #, Scrambled sentence, Answer)
-        const CSV_FILES = {
-            '2pm': '2pm.csv',
-            '3pm': '3pm.csv',
-            '4pm': '4pm.csv',
-            '5pm': '5pm.csv'
-        };
-        
-        // Get elements
-        const classDropdown = document.getElementById('classDropdown');
-        const startBtn = document.getElementById('startBtn');
-        const teamBuzzLink = document.getElementById('teamBuzzLink');
-        const ultimateBattleLink = document.getElementById('ultimateBattleLink');
-        const selectedInfo = document.getElementById('selectedInfo');
-        
-        let selectedClass = localStorage.getItem('megaScrambleClass') || '';
-        let gameStarted = false;
-        
-        // Function to update mode button states
-        function updateModeButtons() {
-            if (gameStarted && selectedClass) {
-                teamBuzzLink.classList.add('active-mode');
-                ultimateBattleLink.classList.add('active-mode');
+    <div class="team-stats" id="teamStats">
+        <div class="team-stat"><span>🔴 Team A</span> <input type="number" id="scoreA" value="0" min="0" step="1"></div>
+        <div class="team-stat"><span>🔵 Team B</span> <input type="number" id="scoreB" value="0" min="0" step="1"></div>
+        <div class="team-stat"><span>🟢 Team C</span> <input type="number" id="scoreC" value="0" min="0" step="1"></div>
+        <div class="team-stat"><span>🟡 Team D</span> <input type="number" id="scoreD" value="0" min="0" step="1"></div>
+    </div>
+
+    <div class="answer-section" id="answerSection">
+        <div class="answer-label">✓ CORRECT ANSWER</div>
+        <div class="answer-text" id="answerText"></div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn btn-show" id="showAnswerBtn">Show Answer</button>
+        <button class="control-btn btn-next hidden" id="nextBtn">Next Question ➤</button>
+        <button class="control-btn btn-home" onclick="location.href='index.html'">Home</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="timesUpModal">
+    <div class="modal-content">
+        <div class="modal-icon">⏰</div>
+        <h2>TIME'S UP!</h2>
+        <p>The team battle has ended</p>
+        <button class="modal-btn" id="modalOkBtn">OK</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="completeModal">
+    <div class="modal-content">
+        <div class="modal-icon">🏆</div>
+        <h2>BATTLE COMPLETE!</h2>
+        <p>Great job, teams!</p>
+        <button class="modal-btn" id="completeOkBtn">OK</button>
+    </div>
+</div>
+
+<script>
+let questions = [];
+let currentIndex = 0;
+let timerTimeout;
+
+// Class display names
+const classNames = {
+    '2pm': '2:00 PM Class (A1)',
+    '3pm': '3:00 PM Class (A1)',
+    '4pm': '4:00 PM Class (High A2)',
+    '5pm': '5:00 PM Class (Pre A1)'
+};
+
+$(document).ready(function () {
+    // Get selected class from localStorage (set by index.html after Start button)
+    const selectedClass = localStorage.getItem('megaScrambleClass');
+    const selectedCSV = localStorage.getItem('megaScrambleCSV');
+    
+    if (!selectedClass || !selectedCSV) {
+        alert('⚠️ No class selected. Please go back to the main menu and click START!');
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    // Display the class
+    const displayName = classNames[selectedClass] || selectedClass.toUpperCase();
+    $('#classDisplay').html(`Class: <span>${displayName}</span>`);
+    
+    console.log('Loading CSV file:', selectedCSV);
+    
+    const url = selectedCSV + '?t=' + new Date().getTime();
+    
+    // Use PapaParse to handle CSV with headers
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            console.log('PapaParse results:', results);
+            
+            if (results.errors && results.errors.length > 0) {
+                console.warn('Parse errors:', results.errors);
+            }
+            
+            if (results.data && results.data.length > 0) {
+                // Map CSV columns to our format
+                // Headers expected: Question #, Scrambled sentence, Answer
+                questions = results.data
+                    .filter(row => {
+                        // Check if we have both scrambled and answer columns
+                        const scrambledCol = row['Scrambled sentence'] || row['Scrambled Sentence'] || row['scrambled sentence'];
+                        const answerCol = row['Answer'] || row['answer'] || row['correct sentence'];
+                        return scrambledCol && answerCol;
+                    })
+                    .map(row => {
+                        const scrambledCol = row['Scrambled sentence'] || row['Scrambled Sentence'] || row['scrambled sentence'];
+                        const answerCol = row['Answer'] || row['answer'] || row['correct sentence'];
+                        return {
+                            scrambled: scrambledCol.trim(),
+                            correct: answerCol.trim()
+                        };
+                    });
+                
+                console.log('Questions loaded:', questions.length);
+                
+                if (questions.length === 0) {
+                    alert('No valid questions found. Please check your CSV format.');
+                    console.log('First row sample:', results.data[0]);
+                } else {
+                    // Shuffle questions for variety
+                    shuffleArray(questions);
+                    showQuestion();
+                    
+                    // Start timer (10 minutes = 600000ms)
+                    timerTimeout = setTimeout(function() {
+                        showTimesUpModal();
+                    }, 600000);
+                    
+                    $('.timer-bar').on('animationend', function() {
+                        showTimesUpModal();
+                    });
+                }
             } else {
-                teamBuzzLink.classList.remove('active-mode');
-                ultimateBattleLink.classList.remove('active-mode');
+                console.error('No data in CSV');
+                alert('Could not load questions. Please check your CSV file.');
             }
+        },
+        error: function(error) {
+            console.error('Error loading CSV:', error);
+            alert('Could not load CSV file. Make sure ' + selectedCSV + ' exists in the same folder.');
         }
-        
-        // Function to set active class
-        function setActiveClass(classValue) {
-            selectedClass = classValue;
-            if (classValue) {
-                localStorage.setItem('megaScrambleClass', classValue);
-                localStorage.setItem('megaScrambleCSV', CSV_FILES[classValue]);
-                selectedInfo.innerHTML = `✅ Class selected: ${classValue.toUpperCase()} (${CSV_FILES[classValue]})<br>📋 CSV includes headers: Question #, Scrambled sentence, Answer`;
-                selectedInfo.style.color = '#2e7d32';
-                selectedInfo.style.background = '#e8f5e9';
-            } else {
-                localStorage.removeItem('megaScrambleClass');
-                localStorage.removeItem('megaScrambleCSV');
-                selectedInfo.innerHTML = '';
-            }
-        }
-        
-        // Handle Start button click
-        startBtn.addEventListener('click', function() {
-            const selectedOption = classDropdown.value;
-            
-            if (!selectedOption) {
-                alert('⚠️ Please select a class first! (2pm, 3pm, 4pm, or 5pm)');
-                return;
-            }
-            
-            gameStarted = true;
-            setActiveClass(selectedOption);
-            updateModeButtons();
-            
-            // Visual feedback
-            startBtn.style.background = "linear-gradient(145deg, #27ae60, #1e8449)";
-            startBtn.innerHTML = "✅ READY!";
-            
-            setTimeout(() => {
-                startBtn.innerHTML = "🚀 START!";
-                startBtn.style.background = "linear-gradient(145deg, #e67e22, #d35400)";
-            }, 2000);
-        });
-        
-        // Handle mode links - ensure class is selected AND game has started
-        teamBuzzLink.addEventListener('click', function(e) {
-            if (!gameStarted || !selectedClass) {
-                e.preventDefault();
-                alert('⚠️ Please select a class and click START! first.');
-            }
-        });
-        
-        ultimateBattleLink.addEventListener('click', function(e) {
-            if (!gameStarted || !selectedClass) {
-                e.preventDefault();
-                alert('⚠️ Please select a class and click START! first.');
-            }
-        });
-        
-        // Restore previous selection if exists
-        if (selectedClass) {
-            classDropdown.value = selectedClass;
-            gameStarted = true;
-            setActiveClass(selectedClass);
-            updateModeButtons();
-        }
-        
-        // Reset game started if dropdown changes
-        classDropdown.addEventListener('change', function() {
-            gameStarted = false;
-            updateModeButtons();
-            setActiveClass('');
-            startBtn.innerHTML = "🚀 START!";
-            startBtn.style.background = "linear-gradient(145deg, #e67e22, #d35400)";
-        });
-    </script>
+    });
+});
+
+// Fisher-Yates shuffle
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function showQuestion() {
+    if (currentIndex >= questions.length) {
+        clearTimeout(timerTimeout);
+        showCompleteModal();
+        return;
+    }
+
+    const q = questions[currentIndex];
+
+    $('#questionNumber').text(`Question ${currentIndex + 1} of ${questions.length}`);
+    $('#scrambledSentence').text(q.scrambled);
+    $('#answerText').text(q.correct);
+
+    // Hide answer section and reset buttons
+    $('#answerSection').hide();
+    $('#showAnswerBtn').removeClass('hidden');
+    $('#nextBtn').addClass('hidden');
+    
+    // Scroll to top
+    $('.question-container').scrollTop(0);
+}
+
+function showTimesUpModal() {
+    clearTimeout(timerTimeout);
+    $('#timesUpModal').fadeIn(300).css('display', 'flex');
+    $('.timer-bar').css('animation-play-state', 'paused');
+}
+
+function showCompleteModal() {
+    $('#completeModal').fadeIn(300).css('display', 'flex');
+}
+
+$('#showAnswerBtn').on('click', function () {
+    $('#answerSection').slideDown(300, function() {
+        $('.question-container').animate({
+            scrollTop: $('.question-container')[0].scrollHeight
+        }, 500);
+    });
+    $(this).addClass('hidden');
+    $('#nextBtn').removeClass('hidden');
+});
+
+$('#nextBtn').on('click', function () {
+    currentIndex++;
+    showQuestion();
+});
+
+// Modal OK buttons
+$('#modalOkBtn').on('click', function() {
+    location.href = 'index.html';
+});
+
+$('#completeOkBtn').on('click', function() {
+    location.href = 'index.html';
+});
+
+window.addEventListener('beforeunload', function() {
+    clearTimeout(timerTimeout);
+});
+</script>
+
 </body>
 </html>
