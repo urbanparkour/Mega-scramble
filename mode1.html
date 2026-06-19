@@ -158,9 +158,10 @@
             font-weight: bold;
         }
 
+        /* TWO TEAMS ONLY */
         .team-stats {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             margin: 10px 0;
             padding: 12px;
             background: linear-gradient(145deg, #FFD700, #FDB931);
@@ -168,30 +169,30 @@
             color: #1A3A5F;
             font-weight: bold;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 30px;
             flex-shrink: 0;
         }
 
         .team-stat {
-            font-size: 18px;
+            font-size: 20px;
             text-align: center;
-            min-width: 90px;
+            min-width: 140px;
         }
 
         .team-stat span {
-            font-size: 24px;
-            margin-right: 6px;
+            font-size: 28px;
+            margin-right: 8px;
         }
 
         .team-stat input {
-            width: 65px;
-            padding: 5px;
-            font-size: 16px;
+            width: 70px;
+            padding: 6px;
+            font-size: 18px;
             text-align: center;
             font-family: 'Fredoka One', cursive;
             border: 2px solid #1A3A5F;
             border-radius: 10px;
-            margin-left: 6px;
+            margin-left: 8px;
         }
 
         .controls {
@@ -299,10 +300,11 @@
             .scrambled-sentence { font-size: 22px; }
             .answer-text { font-size: 20px; }
             .control-btn { font-size: 16px; padding: 8px 18px; min-width: 120px; }
-            .team-stat { font-size: 14px; }
-            .team-stat span { font-size: 20px; }
+            .team-stat { font-size: 16px; }
+            .team-stat span { font-size: 22px; }
             .team-stat input { width: 55px; font-size: 14px; }
             .question-box { padding: 15px; }
+            .team-stats { gap: 15px; }
         }
     </style>
 </head>
@@ -323,11 +325,10 @@
         <div class="scrambled-sentence" id="scrambledSentence">Loading questions...</div>
     </div>
 
+    <!-- TWO TEAMS ONLY: Team A and Team B -->
     <div class="team-stats" id="teamStats">
         <div class="team-stat"><span>🔴 Team A</span> <input type="number" id="scoreA" value="0" min="0" step="1"></div>
         <div class="team-stat"><span>🔵 Team B</span> <input type="number" id="scoreB" value="0" min="0" step="1"></div>
-        <div class="team-stat"><span>🟢 Team C</span> <input type="number" id="scoreC" value="0" min="0" step="1"></div>
-        <div class="team-stat"><span>🟡 Team D</span> <input type="number" id="scoreD" value="0" min="0" step="1"></div>
     </div>
 
     <div class="answer-section" id="answerSection">
